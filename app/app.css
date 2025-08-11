@@ -1,0 +1,37 @@
+/* Minimal plain HTML styles */
+body {
+  font-family: "Roboto Mono", monospace;
+  margin: 20px;
+  line-height: 1.4;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+form {
+  margin: 20px 0;
+}
+
+input,
+button {
+  margin: 5px 0;
+  padding: 5px;
+}
+
+button {
+  cursor: pointer;
+}
