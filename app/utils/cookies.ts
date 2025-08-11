@@ -7,44 +7,44 @@ export const DatabaseConfigSchema = z.object({
 
 export type DatabaseConfig = z.infer<typeof DatabaseConfigSchema>;
 
-export function setCookie(name: string, value: string, days = 365): void {
+export async function setCookie(name: string, value: string, days = 365): Promise<void> {
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+
+  await window.cookieStore.set({
+    name,
+    value: encodeURIComponent(value),
+    expires: expires.getTime(),
+    path: "/",
+    sameSite: "strict",
+  });
 }
 
-export function getCookie(name: string): string | null {
-  const nameEQ = `${name}=`;
-  const cookies = document.cookie.split(";");
-  for (const cookie of cookies) {
-    const c = cookie.trim();
-    if (c.indexOf(nameEQ) === 0) {
-      return decodeURIComponent(c.substring(nameEQ.length));
-    }
-  }
-  return null;
+export async function getCookie(name: string): Promise<string | null> {
+  const cookie = await window.cookieStore.get(name);
+  return cookie ? decodeURIComponent(cookie.value) : null;
 }
 
-export function deleteCookie(name: string): void {
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+export async function deleteCookie(name: string): Promise<void> {
+  await window.cookieStore.delete(name);
 }
 
-export function saveDatabaseConfig(config: DatabaseConfig): void {
-  setCookie("turso_url", config.url);
+export async function saveDatabaseConfig(config: DatabaseConfig): Promise<void> {
+  await setCookie("turso_url", config.url);
   if (config.authToken) {
-    setCookie("turso_auth_token", config.authToken);
+    await setCookie("turso_auth_token", config.authToken);
   } else {
-    deleteCookie("turso_auth_token");
+    await deleteCookie("turso_auth_token");
   }
 }
 
-export function getDatabaseConfig(): DatabaseConfig | null {
-  const url = getCookie("turso_url");
+export async function getDatabaseConfig(): Promise<DatabaseConfig | null> {
+  const url = await getCookie("turso_url");
   if (!url) {
     return null;
   }
 
-  const authToken = getCookie("turso_auth_token");
+  const authToken = await getCookie("turso_auth_token");
 
   try {
     return DatabaseConfigSchema.parse({
@@ -56,7 +56,7 @@ export function getDatabaseConfig(): DatabaseConfig | null {
   }
 }
 
-export function clearDatabaseConfig(): void {
-  deleteCookie("turso_url");
-  deleteCookie("turso_auth_token");
+export async function clearDatabaseConfig(): Promise<void> {
+  await deleteCookie("turso_url");
+  await deleteCookie("turso_auth_token");
 }

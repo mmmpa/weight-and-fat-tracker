@@ -17,11 +17,13 @@ export default function ConfigPage() {
   const [isTestingConnection, setIsTestingConnection] = useState(false);
 
   useEffect(() => {
-    const config = getDatabaseConfig();
-    if (config) {
-      setUrl(config.url);
-      setAuthToken(config.authToken || "");
-    }
+    (async () => {
+      const config = await getDatabaseConfig();
+      if (config) {
+        setUrl(config.url);
+        setAuthToken(config.authToken || "");
+      }
+    })();
   }, []);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -39,7 +41,7 @@ export default function ConfigPage() {
       // Test connection and initialize tables
       await testDatabaseConnection(config.url, config.authToken);
 
-      saveDatabaseConfig(config);
+      await saveDatabaseConfig(config);
       setMessage("Database configuration saved and tables initialized successfully!");
 
       setTimeout(() => {
@@ -56,8 +58,8 @@ export default function ConfigPage() {
     }
   };
 
-  const handleClear = () => {
-    clearDatabaseConfig();
+  const handleClear = async () => {
+    await clearDatabaseConfig();
     setUrl("");
     setAuthToken("");
     setMessage("Configuration cleared.");
@@ -136,13 +138,13 @@ export default function ConfigPage() {
             <tr>
               <td style={{ padding: "5px" }}>Database URL:</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {getDatabaseConfig()?.url || "(not configured)"}
+                {url || "(not configured)"}
               </td>
             </tr>
             <tr>
               <td style={{ padding: "5px" }}>Auth Token:</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {getDatabaseConfig()?.authToken ? "****** (configured)" : "(not set)"}
+                {authToken ? "****** (configured)" : "(not set)"}
               </td>
             </tr>
           </tbody>

@@ -5,8 +5,8 @@ import { DatabaseNotConfiguredError } from "./errors";
 
 let tursoClient: Client | null = null;
 
-export function getTursoClient(): Client {
-  const config = getDatabaseConfig();
+export async function getTursoClient(): Promise<Client> {
+  const config = await getDatabaseConfig();
 
   if (!config) {
     throw new DatabaseNotConfiguredError();
@@ -23,7 +23,7 @@ export function getTursoClient(): Client {
 export const DEFAULT_USER_ID = "default-user";
 
 export async function initializeTables(client?: Client): Promise<void> {
-  const turso = client || getTursoClient();
+  const turso = client || (await getTursoClient());
 
   try {
     // Create weight_records table

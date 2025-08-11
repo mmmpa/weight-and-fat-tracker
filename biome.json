@@ -1,5 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
+  "files": {
+    "includes": ["**/*", "!node_modules/**/*", "!build/**/*", "!dist/**/*", "!.react-router/**/*"]
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -21,8 +24,5 @@
       "trailingCommas": "es5",
       "semicolons": "always"
     }
-  },
-  "files": {
-    "experimentalScannerIgnores": ["node_modules/**", "build/**", "dist/**", ".react-router/**"]
   }
 }

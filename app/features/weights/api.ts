@@ -13,13 +13,15 @@ function generateId(): string {
 }
 
 export async function getWeightRecords(): Promise<WeightRecord[]> {
-  const result = await getTursoClient().execute("SELECT * FROM weight_records ORDER BY date DESC");
+  const turso = await getTursoClient();
+  const result = await turso.execute("SELECT * FROM weight_records ORDER BY date DESC");
 
   return result.rows.map((row) => WeightRecordSchema.parse(row));
 }
 
 export async function getWeightRecordById(id: string): Promise<WeightRecord | null> {
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: "SELECT * FROM weight_records WHERE id = ?",
     args: [id],
   });
@@ -29,7 +31,8 @@ export async function getWeightRecordById(id: string): Promise<WeightRecord | nu
 }
 
 export async function getWeightRecordByDate(date: string): Promise<WeightRecord | null> {
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: "SELECT * FROM weight_records WHERE date = ?",
     args: [date],
   });
@@ -43,7 +46,8 @@ export async function createWeightRecord(input: CreateWeightRecordInput): Promis
   const validatedInput = CreateWeightRecordInputSchema.parse(input);
 
   const id = generateId();
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: "INSERT INTO weight_records (id, date, weight, fat_rate) VALUES (?, ?, ?, ?) RETURNING *",
     args: [id, validatedInput.date, validatedInput.weight, validatedInput.fat_rate],
   });
@@ -80,7 +84,8 @@ export async function updateWeightRecord(
 
   args.push(id);
 
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: `UPDATE weight_records SET ${setClauses.join(", ")} WHERE id = ? RETURNING *`,
     args,
   });
@@ -90,7 +95,8 @@ export async function updateWeightRecord(
 }
 
 export async function deleteWeightRecord(id: string): Promise<boolean> {
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: "DELETE FROM weight_records WHERE id = ?",
     args: [id],
   });
@@ -102,7 +108,8 @@ export async function getWeightRecordsByDateRange(
   startDate: string,
   endDate: string
 ): Promise<WeightRecord[]> {
-  const result = await getTursoClient().execute({
+  const turso = await getTursoClient();
+  const result = await turso.execute({
     sql: "SELECT * FROM weight_records WHERE date >= ? AND date <= ? ORDER BY date ASC",
     args: [startDate, endDate],
   });
@@ -111,9 +118,8 @@ export async function getWeightRecordsByDateRange(
 }
 
 export async function getLatestWeightRecord(): Promise<WeightRecord | null> {
-  const result = await getTursoClient().execute(
-    "SELECT * FROM weight_records ORDER BY date DESC LIMIT 1"
-  );
+  const turso = await getTursoClient();
+  const result = await turso.execute("SELECT * FROM weight_records ORDER BY date DESC LIMIT 1");
 
   if (!result.rows[0]) return null;
   return WeightRecordSchema.parse(result.rows[0]);
