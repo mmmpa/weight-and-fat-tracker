@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
+import { generateShareUrl } from "../features/share/utils";
 import {
   createWeightRecord,
   deleteWeightRecord,
@@ -371,6 +372,9 @@ export default function MonthlyDetails() {
   // Sort dates for display
   const sortedDateKeys = Object.keys(recordStates).sort();
 
+  // Generate share URL using the extracted utility
+  const shareUrl = generateShareUrl(records, window.location.origin);
+
   return (
     <div>
       <h2>
@@ -413,6 +417,21 @@ export default function MonthlyDetails() {
               ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}%`
               : "N/A"}
           </p>
+          {shareUrl && (
+            <p>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl).then(
+                    () => alert("Share URL copied to clipboard!"),
+                    () => alert(`Failed to copy URL. Please copy manually:\n${shareUrl}`)
+                  );
+                }}
+              >
+                Copy Share URL
+              </button>
+            </p>
+          )}
         </div>
       )}
 

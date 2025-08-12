@@ -7,4 +7,5 @@ export default [
   route("graph", "routes/graph.tsx"),
   route("export-import", "routes/export-import.tsx"),
   route("config", "routes/config.tsx"),
+  route("share", "routes/share.tsx"),
 ] satisfies RouteConfig;
