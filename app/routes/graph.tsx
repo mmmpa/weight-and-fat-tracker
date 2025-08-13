@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -24,6 +25,7 @@ export async function clientLoader() {
 }
 
 export default function Graph() {
+  const { t } = useTranslation();
   const { initialRecords } = useLoaderData<typeof clientLoader>();
   const [records, setRecords] = useState<WeightRecord[]>(initialRecords);
   const [loading, setLoading] = useState(false);
@@ -77,28 +79,33 @@ export default function Graph() {
     await handleFilterChange();
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>{t("common.status.loading")}</div>;
+  if (error)
+    return (
+      <div>
+        {t("common.status.error")} {error}
+      </div>
+    );
 
   return (
     <div>
-      <h2>Weight & Fat Percentage Graph</h2>
+      <h2>{t("graph.title")}</h2>
 
       <div style={{ marginBottom: "20px" }}>
-        <h3>Date Range</h3>
+        <h3>{t("common.dateLabels.dateRange")}</h3>
         <label>
           <input
             type="checkbox"
             checked={useRangeFilter}
             onChange={(e) => handleRangeFilterToggle(e.target.checked)}
           />
-          Use date range filter
+          {t("graph.useDateRange")}
         </label>
 
         {useRangeFilter && (
           <div style={{ marginTop: "10px" }}>
             <label>
-              Start Date:
+              {t("common.dateLabels.startDate")}
               <input
                 type="date"
                 value={startDate}
@@ -108,7 +115,7 @@ export default function Graph() {
             </label>
             <br />
             <label>
-              End Date:
+              {t("common.dateLabels.endDate")}
               <input
                 type="date"
                 value={endDate}
@@ -122,12 +129,10 @@ export default function Graph() {
 
       <WeightGraph
         records={records}
-        title={useRangeFilter ? `Records from ${startDate} to ${endDate}` : "All Records"}
+        title={
+          useRangeFilter ? t("graph.recordsRange", { startDate, endDate }) : t("graph.allRecords")
+        }
       />
-
-      <p>
-        <em>← Older records on the left | Newer records on the right →</em>
-      </p>
 
       <br />
 
@@ -135,8 +140,8 @@ export default function Graph() {
         records={records}
         title={
           useRangeFilter
-            ? `Weight & Fat Weight from ${startDate} to ${endDate}`
-            : "Weight & Fat Weight - All Records"
+            ? t("graph.weightFatRange", { startDate, endDate })
+            : t("graph.weightFatAll")
         }
       />
     </div>

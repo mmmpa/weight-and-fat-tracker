@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -11,6 +12,7 @@ export function meta() {
 }
 
 export default function Share() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
 
   // Get the first query parameter key as the data string
@@ -22,7 +24,7 @@ export default function Share() {
       <div>
         <h2>Shared Weight Data</h2>
         <p>
-          <Link to="/">[Back to Home]</Link>
+          <Link to="/">[{t("common.actions.backToHome")}]</Link>
         </p>
         <p>Invalid or missing share data in URL.</p>
         <p>Expected format: ?yyyymmdd-n-aaabbbccc-xxxyyyzzz</p>
@@ -56,10 +58,10 @@ export default function Share() {
     <div>
       <h2>Shared Weight Data</h2>
       <p>
-        <Link to="/">[Back to Home]</Link>
+        <Link to="/">[{t("common.actions.backToHome")}]</Link>
       </p>
 
-      <h3>Summary</h3>
+      <h3>{t("share.summary")}</h3>
       <p>
         <strong>Date Range:</strong> {dateRangeStr}
         <br />

@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import {
   clearDatabaseConfig,
@@ -9,6 +10,7 @@ import {
 import { testDatabaseConnection } from "../utils/turso";
 
 export default function ConfigPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
   const [authToken, setAuthToken] = useState("");
@@ -42,7 +44,7 @@ export default function ConfigPage() {
       await testDatabaseConnection(config.url, config.authToken);
 
       await saveDatabaseConfig(config);
-      setMessage("Database configuration saved and tables initialized successfully!");
+      setMessage(t("config.success"));
 
       setTimeout(() => {
         navigate("/");
@@ -62,24 +64,21 @@ export default function ConfigPage() {
     await clearDatabaseConfig();
     setUrl("");
     setAuthToken("");
-    setMessage("Configuration cleared.");
+    setMessage(t("config.cleared"));
   };
 
   return (
     <div>
-      <h1>Database Configuration</h1>
+      <h1>{t("config.title")}</h1>
 
-      <p>
-        Configure your Turso database connection. The system will automatically test the connection
-        and create required tables when you save the configuration.
-      </p>
+      <p>{t("config.description")}</p>
 
       <form onSubmit={handleSubmit}>
         <table border={1} style={{ borderCollapse: "collapse", marginBottom: "20px" }}>
           <tbody>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="url">Database URL:</label>
+                <label htmlFor="url">{t("config.dbUrl")}</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -94,7 +93,7 @@ export default function ConfigPage() {
             </tr>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="authToken">Auth Token (optional):</label>
+                <label htmlFor="authToken">{t("config.authToken")}</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -111,12 +110,10 @@ export default function ConfigPage() {
 
         <div style={{ marginBottom: "10px" }}>
           <button type="submit" disabled={isTestingConnection}>
-            {isTestingConnection
-              ? "Testing Connection & Creating Tables..."
-              : "Save Configuration & Initialize Tables"}
+            {isTestingConnection ? t("config.testing") : t("config.saveButton")}
           </button>{" "}
           <button type="button" onClick={handleClear} disabled={isTestingConnection}>
-            Clear Configuration
+            {t("common.actions.clear")}
           </button>
         </div>
       </form>
@@ -126,25 +123,25 @@ export default function ConfigPage() {
       {error && <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>}
 
       <div style={{ marginTop: "20px" }}>
-        <Link to="/">← Back to Home</Link>
+        <Link to="/">← {t("common.actions.backToHome")}</Link>
       </div>
 
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3>Current Configuration</h3>
+        <h3>{t("config.currentConfig")}</h3>
         <table border={1} style={{ borderCollapse: "collapse" }}>
           <tbody>
             <tr>
-              <td style={{ padding: "5px" }}>Database URL:</td>
+              <td style={{ padding: "5px" }}>{t("config.dbUrl")}</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {url || "(not configured)"}
+                {url || t("config.notConfigured")}
               </td>
             </tr>
             <tr>
-              <td style={{ padding: "5px" }}>Auth Token:</td>
+              <td style={{ padding: "5px" }}>{t("config.authToken")}</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {authToken ? "****** (configured)" : "(not set)"}
+                {authToken ? t("config.configured") : t("config.notSet")}
               </td>
             </tr>
           </tbody>
@@ -154,26 +151,21 @@ export default function ConfigPage() {
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3>Database Initialization</h3>
-        <p>
-          When you save the configuration, the following tables and indexes will be created if they
-          don't exist:
-        </p>
+        <h3>{t("config.initialization.title")}</h3>
+        <p>{t("config.initialization.description")}</p>
         <ul>
           <li>
-            <strong>weight_records</strong> - Main table for storing weight and fat percentage data
+            <strong>weight_records</strong> - {t("config.initialization.mainTable")}
           </li>
           <li>
-            <strong>idx_weight_records_date</strong> - Index for date-based queries
+            <strong>idx_weight_records_date</strong> - {t("config.initialization.dateIndex")}
           </li>
           <li>
-            <strong>idx_weight_records_date_unique</strong> - Unique constraint to prevent duplicate
-            dates
+            <strong>idx_weight_records_date_unique</strong> -{" "}
+            {t("config.initialization.uniqueConstraint")}
           </li>
         </ul>
-        <p>
-          All tables include proper constraints and validation rules as defined in TURSO_TABLES.md
-        </p>
+        <p>{t("config.initialization.rulesNote")}</p>
       </div>
     </div>
   );

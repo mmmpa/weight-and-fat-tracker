@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { getWeightRecords, getWeightRecordsStats } from "../features/weights/api";
 import { DatabaseNotConfiguredError } from "../utils/errors";
@@ -33,27 +34,29 @@ export async function clientLoader() {
 
 export default function Home() {
   const { recentRecords, stats } = useLoaderData<typeof clientLoader>();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h2>Dashboard</h2>
+      <h2>{t("home.title")}</h2>
 
-      <h3>Quick Links</h3>
+      <h3>{t("home.quickLinks.title")}</h3>
       <p>
-        <Link to="/monthly">[Monthly Records]</Link>
+        <Link to="/monthly">{t("home.quickLinks.monthly")}</Link>
         <br />
-        <Link to="/graph">[View Graph]</Link>
+        <Link to="/graph">{t("home.quickLinks.graph")}</Link>
         <br />
-        <Link to="/export-import">[Export/Import Data]</Link>
+        <Link to="/export-import">{t("home.quickLinks.exportImport")}</Link>
         <br />
-        <Link to="/config">[Database Configuration]</Link>
+        <Link to="/config">{t("home.quickLinks.config")}</Link>
       </p>
 
-      <h3>Summary</h3>
+      <h3>{t("home.summary.title")}</h3>
       <p>
-        <strong>Total Records:</strong> {stats.totalRecords}
+        <strong>{t("home.summary.totalRecords")}</strong> {stats.totalRecords}
         <br />
-        <strong>Latest Weight:</strong> {stats.latestWeight.toFixed(1)} kg
+        <strong>{t("home.summary.latestWeight")}</strong> {stats.latestWeight.toFixed(1)}{" "}
+        {t("common.units.kg")}
         {stats.weightChange !== 0 && (
           <span>
             {" "}
@@ -62,25 +65,27 @@ export default function Home() {
           </span>
         )}
         <br />
-        <strong>Latest Fat %:</strong> {stats.latestFat.toFixed(1)}%
+        <strong>{t("home.summary.latestFat")}</strong> {stats.latestFat.toFixed(1)}
+        {t("common.units.percent")}
         {stats.fatChange !== 0 && (
           <span>
             {" "}
             ({stats.fatChange > 0 ? "+" : ""}
-            {stats.fatChange.toFixed(1)}%)
+            {stats.fatChange.toFixed(1)}
+            {t("common.units.percent")})
           </span>
         )}
       </p>
 
       {recentRecords.length > 0 && (
         <div>
-          <h3>Recent Records</h3>
+          <h3>{t("home.recentRecords")}</h3>
           <table>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Weight (kg)</th>
-                <th>Fat %</th>
+                <th>{t("common.table.date")}</th>
+                <th>{t("common.table.weight")}</th>
+                <th>{t("common.table.fatPercent")}</th>
               </tr>
             </thead>
             <tbody>

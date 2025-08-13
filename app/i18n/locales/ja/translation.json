@@ -1,0 +1,200 @@
+{
+  "common": {
+    "appTitle": "Weight & Fat Tracker",
+    "navigation": {
+      "home": "ホーム",
+      "graph": "グラフ",
+      "monthly": "月別",
+      "config": "設定"
+    },
+    "units": {
+      "kg": "kg",
+      "percent": "%",
+      "na": "N/A"
+    },
+    "actions": {
+      "save": "保存",
+      "saving": "保存中...",
+      "create": "作成",
+      "delete": "削除",
+      "deleting": "削除中...",
+      "export": "全記録をエクスポート",
+      "back": "戻る",
+      "backToHome": "ホームに戻る",
+      "backToMonthly": "[月別に戻る]",
+      "clear": "設定をクリア",
+      "copyUrl": "共有URLをコピー"
+    },
+    "status": {
+      "loading": "読み込み中...",
+      "processing": "処理中...",
+      "error": "エラー:",
+      "status": "ステータス:"
+    },
+    "table": {
+      "date": "日付",
+      "weight": "体重 (kg)",
+      "fatPercent": "体脂肪率 %",
+      "fatWeight": "体脂肪量 (kg)",
+      "leanMass": "除脂肪体重 (kg)",
+      "actions": "操作"
+    },
+    "form": {
+      "weightPlaceholder": "体重",
+      "fatPlaceholder": "体脂肪率 %"
+    },
+    "dateLabels": {
+      "today": "(今日)",
+      "dateRange": "期間",
+      "startDate": "開始日:",
+      "endDate": "終了日:"
+    }
+  },
+  "home": {
+    "title": "ダッシュボード",
+    "meta": "体重と体脂肪率を記録・管理",
+    "quickLinks": {
+      "title": "クイックリンク",
+      "monthly": "[月別記録]",
+      "graph": "[グラフ表示]",
+      "exportImport": "[エクスポート/インポート]",
+      "config": "[データベース設定]"
+    },
+    "summary": {
+      "title": "概要",
+      "totalRecords": "総記録数:",
+      "latestWeight": "最新の体重:",
+      "latestFat": "最新の体脂肪率:"
+    },
+    "recentRecords": "最近の記録"
+  },
+  "monthly": {
+    "title": "月別記録",
+    "noRecords": "記録が見つかりません。月別表示から最初の記録を追加してください。",
+    "quickLink": "クイックリンク:",
+    "currentMonth": "今月",
+    "availableMonths": "利用可能な月",
+    "record": "件",
+    "records": "件",
+    "detailTitle": "{{year}}年{{month}}月の記録",
+    "summary": {
+      "title": "概要",
+      "records": "記録数:",
+      "avgWeight": "平均体重:",
+      "avgFat": "平均体脂肪率:",
+      "weightChange": "体重変化:",
+      "fatChange": "体脂肪率変化:"
+    },
+    "showingDays": "{{year}}年{{month}}月の全{{totalDays}}日を表示 ({{daysWithData}}日分のデータあり)",
+    "graphs": {
+      "trends": "推移",
+      "weightFat": "体重・体脂肪量"
+    }
+  },
+  "graph": {
+    "title": "体重・体脂肪率グラフ",
+    "useDateRange": "期間を指定",
+    "recordsRange": "{{startDate}}から{{endDate}}までの記録",
+    "allRecords": "全ての記録",
+    "weightFatRange": "{{startDate}}から{{endDate}}までの体重・体脂肪量",
+    "weightFatAll": "体重・体脂肪量 - 全記録",
+    "legend": "← 左側が古い記録 | 右側が新しい記録 →"
+  },
+  "exportImport": {
+    "title": "体重記録のエクスポート/インポート",
+    "export": {
+      "title": "データのエクスポート",
+      "description": "全ての体重記録をJSONファイルでダウンロードします。"
+    },
+    "import": {
+      "title": "データのインポート",
+      "description": "JSONファイルから体重記録をインポートします。既存の記録は更新され、新しい記録は追加されます。",
+      "complete": "インポート完了: {{new}}件の新規、{{updated}}件の更新、{{failed}}件の失敗"
+    },
+    "fileFormat": {
+      "title": "ファイル形式",
+      "description": "JSONファイルには体重記録の配列を含める必要があります:"
+    }
+  },
+  "config": {
+    "title": "データベース設定",
+    "description": "Tursoデータベース接続を設定します。設定を保存すると、システムが自動的に接続をテストし、必要なテーブルを作成します。",
+    "currentConfig": "現在の設定",
+    "dbUrl": "データベースURL:",
+    "authToken": "認証トークン (オプション):",
+    "notConfigured": "(未設定)",
+    "configured": "****** (設定済み)",
+    "notSet": "(未設定)",
+    "saveButton": "設定を保存しテーブルを初期化",
+    "testing": "接続テスト中・テーブル作成中...",
+    "success": "データベース設定が保存され、テーブルが正常に初期化されました！",
+    "cleared": "設定がクリアされました。",
+    "initialization": {
+      "title": "データベース初期化",
+      "description": "設定を保存すると、以下のテーブルとインデックスが存在しない場合は作成されます:",
+      "mainTable": "体重と体脂肪率データを保存するメインテーブル",
+      "dateIndex": "日付ベースのクエリ用インデックス",
+      "uniqueConstraint": "重複する日付を防ぐユニーク制約",
+      "rulesNote": "全てのテーブルにはTURSO_TABLES.mdで定義された適切な制約と検証ルールが含まれます"
+    }
+  },
+  "share": {
+    "title": "共有された体重データ",
+    "invalidData": "URLに無効または不足している共有データがあります。",
+    "expectedFormat": "期待される形式: ?yyyymmdd-n-aaabbbccc-xxxyyyzzz",
+    "formatExplanation": {
+      "startDate": "yyyymmdd: 開始日 (例: 20240101)",
+      "digitCount": "n: 体重の桁数 (3または4)",
+      "weightValues": "aaabbbccc: 体重値",
+      "fatValues": "xxxyyyzzz: 体脂肪率値 (各3桁)"
+    },
+    "summary": "概要",
+    "dataTable": "データテーブル",
+    "dateRange": "期間:",
+    "graphs": {
+      "trends": "体重・体脂肪率の推移",
+      "weightFat": "体重・体脂肪量"
+    }
+  },
+  "weightGraph": {
+    "defaultTitle": "体重・体脂肪率グラフ",
+    "noData": "グラフ用のデータがありません",
+    "legend": "凡例: 青線 = 体重 (kg)、赤線 = 体脂肪率 %",
+    "dataPoints": "データポイント数:",
+    "dateRange": "期間:",
+    "ariaLabel": "体重と体脂肪率のグラフ",
+    "title": "体重と体脂肪率の時系列推移"
+  },
+  "weightAbsoluteGraph": {
+    "defaultTitle": "体重・体脂肪量グラフ",
+    "noData": "グラフ用のデータがありません",
+    "legend": "凡例: 青 = 総体重 (kg)、赤 = 体脂肪量 (kg)、緑 = 除脂肪体重 (kg)",
+    "dataPoints": "データポイント数:",
+    "dateRange": "期間:",
+    "ariaLabel": "体重と体脂肪量のグラフ",
+    "title": "総体重と体脂肪量の時系列推移"
+  },
+  "errors": {
+    "databaseNotConfigured": "データベースが設定されていません。まずデータベース設定を行ってください。",
+    "deleteRecord": "記録の削除に失敗しました",
+    "updateRecord": "記録の更新に失敗しました",
+    "saveRecord": "記録の保存に失敗しました",
+    "copyUrl": "URLのコピーに失敗しました。手動でコピーしてください:",
+    "exportFailed": "エクスポートに失敗しました:",
+    "importFailed": "インポートに失敗しました:",
+    "invalidFileFormat": "無効なファイル形式: 記録の配列が必要です",
+    "invalidConfig": "無効な設定または接続に失敗しました"
+  },
+  "validation": {
+    "invalidWeight": "有効な体重を入力してください (0より大きい数値)",
+    "invalidFat": "有効な体脂肪率を入力してください (0より大きい数値)",
+    "invalidWeightValue": "無効な体重値です。0より大きい数値を入力してください。",
+    "invalidFatValue": "無効な体脂肪率値です。0より大きい数値を入力してください。"
+  },
+  "confirm": {
+    "deleteRecord": "この記録を削除してもよろしいですか？"
+  },
+  "success": {
+    "urlCopied": "共有URLがクリップボードにコピーされました！"
+  }
+}

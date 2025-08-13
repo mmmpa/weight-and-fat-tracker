@@ -138,10 +138,6 @@ function MockGraph({ initialRecords = sampleRecords }: { initialRecords?: Weight
         title={useRangeFilter ? `Records from ${startDate} to ${endDate}` : "All Records"}
       />
 
-      <p>
-        <em>← Older records on the left | Newer records on the right →</em>
-      </p>
-
       <br />
 
       <WeightAbsoluteGraph

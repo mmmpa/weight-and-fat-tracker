@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { getAvailableMonths } from "../features/weights/api";
 import { DatabaseNotConfiguredError } from "../utils/errors";
@@ -23,6 +24,7 @@ export async function clientLoader() {
 
 export default function Monthly() {
   const { availableMonths } = useLoaderData<typeof clientLoader>();
+  const { t } = useTranslation();
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -30,20 +32,20 @@ export default function Monthly() {
 
   return (
     <div>
-      <h2>Monthly Records</h2>
+      <h2>{t("monthly.title")}</h2>
 
       {availableMonths.length === 0 ? (
-        <p>No records found. Use the monthly view to add your first record.</p>
+        <p>{t("monthly.noRecords")}</p>
       ) : (
         <div>
           <p>
-            <strong>Quick link:</strong>{" "}
+            <strong>{t("monthly.quickLink")}</strong>{" "}
             <Link to={`/monthly/${currentYear}/${currentMonth}`}>
-              Current Month ({currentYear}/{currentMonth.toString().padStart(2, "0")})
+              {t("monthly.currentMonth")} ({currentYear}/{currentMonth.toString().padStart(2, "0")})
             </Link>
           </p>
 
-          <h3>Available Months</h3>
+          <h3>{t("monthly.availableMonths")}</h3>
           <ul>
             {availableMonths.map(
               ({ year, month, count }: { year: number; month: number; count: number }) => (
@@ -51,7 +53,7 @@ export default function Monthly() {
                   <Link to={`/monthly/${year}/${month}`}>
                     {year}/{month.toString().padStart(2, "0")}
                   </Link>{" "}
-                  ({count} record{count !== 1 ? "s" : ""})
+                  ({count} {count !== 1 ? t("monthly.records") : t("monthly.record")})
                 </li>
               )
             )}

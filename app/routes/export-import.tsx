@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   createWeightRecord,
   getWeightRecordByDate,
@@ -8,6 +9,7 @@ import {
 import { CreateWeightRecordInputSchema } from "../features/weights/types";
 
 export default function ExportImport() {
+  const { t } = useTranslation();
   const [importStatus, setImportStatus] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -91,7 +93,7 @@ export default function ExportImport() {
       <h2>Export Data</h2>
       <p>Download all your weight records as a JSON file.</p>
       <button type="button" onClick={handleExport}>
-        Export All Records
+        {t("common.actions.export")}
       </button>
 
       <br />
@@ -132,7 +134,7 @@ export default function ExportImport() {
       </pre>
 
       <br />
-      <a href="/">Back to Home</a>
+      <a href="/">{t("common.actions.backToHome")}</a>
     </div>
   );
 }

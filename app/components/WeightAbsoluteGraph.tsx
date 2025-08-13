@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { WeightRecord } from "../features/weights/types";
 
 type WeightAbsoluteGraphProps = {
@@ -6,10 +7,8 @@ type WeightAbsoluteGraphProps = {
   title?: string;
 };
 
-export function WeightAbsoluteGraph({
-  records,
-  title = "Weight & Fat Weight Graph",
-}: WeightAbsoluteGraphProps) {
+export function WeightAbsoluteGraph({ records, title }: WeightAbsoluteGraphProps) {
+  const { t } = useTranslation();
   const [containerWidth, setContainerWidth] = useState(window.innerWidth - 40); // Account for page margins
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export function WeightAbsoluteGraph({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (records.length === 0) return <div>No data available for graph</div>;
+  if (records.length === 0) return <div>{t("weightAbsoluteGraph.noData")}</div>;
 
   // Calculate fat weight and muscle weight for each record
   const recordsWithCalculations = records.map((record) => {
@@ -75,15 +74,15 @@ export function WeightAbsoluteGraph({
 
   return (
     <div>
-      <h3>{title}</h3>
+      <h3>{title || t("weightAbsoluteGraph.defaultTitle")}</h3>
 
       <svg
         width={chartWidth}
         height={chartHeight}
         style={{ border: "1px solid black", display: "block", width: "100%" }}
-        aria-label="Weight and fat weight graph"
+        aria-label={t("weightAbsoluteGraph.ariaLabel")}
       >
-        <title>Total weight and fat weight trends over time</title>
+        <title>{t("weightAbsoluteGraph.title")}</title>
         {/* Horizontal grid lines */}
         {[0, 0.2, 0.4, 0.6, 0.8, 1].map((ratio) => (
           <line
@@ -143,7 +142,8 @@ export function WeightAbsoluteGraph({
               fontSize="12"
               fill="#666"
             >
-              {value.toFixed(1)}kg
+              {value.toFixed(1)}
+              {t("common.units.kg")}
             </text>
           );
         })}
@@ -176,12 +176,13 @@ export function WeightAbsoluteGraph({
         })}
       </svg>
 
-      <p>Legend: Blue = Total Weight (kg), Red = Fat Weight (kg), Green = Lean Body Mass (kg)</p>
+      <p>{t("weightAbsoluteGraph.legend")}</p>
 
       <p>
-        <strong>Data Points:</strong> {records.length}
+        <strong>{t("weightAbsoluteGraph.dataPoints")}</strong> {records.length}
         <br />
-        <strong>Date Range:</strong> {new Date(records[0].date).toLocaleDateString()} -{" "}
+        <strong>{t("weightAbsoluteGraph.dateRange")}</strong>{" "}
+        {new Date(records[0].date).toLocaleDateString()} -{" "}
         {new Date(records[records.length - 1].date).toLocaleDateString()}
       </p>
     </div>

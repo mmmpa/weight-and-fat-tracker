@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { WeightRecord } from "../features/weights/types";
 
 type WeightGraphProps = {
@@ -6,10 +7,8 @@ type WeightGraphProps = {
   title?: string;
 };
 
-export function WeightGraph({
-  records,
-  title = "Weight & Fat Percentage Graph",
-}: WeightGraphProps) {
+export function WeightGraph({ records, title }: WeightGraphProps) {
+  const { t } = useTranslation();
   const [containerWidth, setContainerWidth] = useState(window.innerWidth - 40); // Account for page margins
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export function WeightGraph({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (records.length === 0) return <div>No data available for graph</div>;
+  if (records.length === 0) return <div>{t("weightGraph.noData")}</div>;
 
   const maxWeight = Math.max(...records.map((r) => r.weight));
   const minWeight = Math.min(...records.map((r) => r.weight));
@@ -73,15 +72,15 @@ export function WeightGraph({
 
   return (
     <div>
-      <h3>{title}</h3>
+      <h3>{title || t("weightGraph.defaultTitle")}</h3>
 
       <svg
         width={chartWidth}
         height={chartHeight}
         style={{ border: "1px solid black", display: "block", width: "100%" }}
-        aria-label="Weight and fat percentage graph"
+        aria-label={t("weightGraph.ariaLabel")}
       >
-        <title>Weight and fat percentage trends over time</title>
+        <title>{t("weightGraph.title")}</title>
         {/* Horizontal grid lines */}
         {[0, 0.2, 0.4, 0.6, 0.8, 1].map((ratio) => (
           <line
@@ -138,7 +137,8 @@ export function WeightGraph({
               fontSize="12"
               fill="#3b82f6"
             >
-              {weight.toFixed(1)}kg
+              {weight.toFixed(1)}
+              {t("common.units.kg")}
             </text>
           );
         })}
@@ -155,7 +155,8 @@ export function WeightGraph({
               fontSize="12"
               fill="#ef4444"
             >
-              {fat.toFixed(1)}%
+              {fat.toFixed(1)}
+              {t("common.units.percent")}
             </text>
           );
         })}
@@ -188,12 +189,13 @@ export function WeightGraph({
         })}
       </svg>
 
-      <p>Legend: Blue line = Weight (kg), Red line = Fat %</p>
+      <p>{t("weightGraph.legend")}</p>
 
       <p>
-        <strong>Data Points:</strong> {records.length}
+        <strong>{t("weightGraph.dataPoints")}</strong> {records.length}
         <br />
-        <strong>Date Range:</strong> {new Date(records[0].date).toLocaleDateString()} -{" "}
+        <strong>{t("weightGraph.dateRange")}</strong>{" "}
+        {new Date(records[0].date).toLocaleDateString()} -{" "}
         {new Date(records[records.length - 1].date).toLocaleDateString()}
       </p>
     </div>

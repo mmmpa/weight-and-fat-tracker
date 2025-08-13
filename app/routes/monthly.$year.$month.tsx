@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -105,6 +106,7 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 }
 
 export default function MonthlyDetails() {
+  const { t } = useTranslation();
   const {
     records: initialRecords,
     stats: initialStats,
@@ -123,7 +125,7 @@ export default function MonthlyDetails() {
     const state = recordStates[dateKey];
     if (!state || !state.id) return;
 
-    if (!confirm("Are you sure you want to delete this record?")) return;
+    if (!confirm(t("confirm.deleteRecord"))) return;
 
     try {
       setDeleteLoading(dateKey);
@@ -148,7 +150,7 @@ export default function MonthlyDetails() {
         const newStats = await getMonthlyStats(yearNum, monthNum);
         setStats(newStats);
       } else {
-        alert("Failed to delete record");
+        alert(t("errors.deleteRecord"));
       }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete record");
@@ -188,7 +190,7 @@ export default function MonthlyDetails() {
         },
       });
 
-      alert("Please enter a valid weight (number greater than 0)");
+      alert(t("validation.invalidWeight"));
       return;
     }
 
@@ -215,7 +217,7 @@ export default function MonthlyDetails() {
         },
       });
 
-      alert("Please enter a valid fat rate (number greater than 0)");
+      alert(t("validation.invalidFat"));
       return;
     }
 
@@ -260,7 +262,7 @@ export default function MonthlyDetails() {
             },
           });
         } else {
-          alert("Failed to update record");
+          alert(t("errors.updateRecord"));
           return;
         }
       }
@@ -397,25 +399,29 @@ export default function MonthlyDetails() {
 
       {stats && (
         <div>
-          <h3>Summary</h3>
+          <h3>{t("monthly.summary.title")}</h3>
           <p>
-            <strong>Records:</strong> {stats.totalRecords}
+            <strong>{t("monthly.summary.records")}</strong> {stats.totalRecords}
             <br />
-            <strong>Avg Weight:</strong>{" "}
-            {stats.totalRecords > 0 ? `${stats.averageWeight.toFixed(1)} kg` : "N/A"}
+            <strong>{t("monthly.summary.avgWeight")}</strong>{" "}
+            {stats.totalRecords > 0
+              ? `${stats.averageWeight.toFixed(1)} ${t("common.units.kg")}`
+              : t("common.units.na")}
             <br />
-            <strong>Avg Fat:</strong>{" "}
-            {stats.totalRecords > 0 ? `${stats.averageFat.toFixed(1)}%` : "N/A"}
+            <strong>{t("monthly.summary.avgFat")}</strong>{" "}
+            {stats.totalRecords > 0
+              ? `${stats.averageFat.toFixed(1)}${t("common.units.percent")}`
+              : t("common.units.na")}
             <br />
-            <strong>Weight Change:</strong>{" "}
+            <strong>{t("monthly.summary.weightChange")}</strong>{" "}
             {stats.totalRecords > 1
-              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)} kg`
-              : "N/A"}
+              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)} ${t("common.units.kg")}`
+              : t("common.units.na")}
             <br />
-            <strong>Fat Change:</strong>{" "}
+            <strong>{t("monthly.summary.fatChange")}</strong>{" "}
             {stats.totalRecords > 1
-              ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}%`
-              : "N/A"}
+              ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}${t("common.units.percent")}`
+              : t("common.units.na")}
           </p>
           {shareUrl && (
             <p>
@@ -423,12 +429,12 @@ export default function MonthlyDetails() {
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(shareUrl).then(
-                    () => alert("Share URL copied to clipboard!"),
-                    () => alert(`Failed to copy URL. Please copy manually:\n${shareUrl}`)
+                    () => alert(t("success.urlCopied")),
+                    () => alert(`${t("errors.copyUrl")}\n${shareUrl}`)
                   );
                 }}
               >
-                Copy Share URL
+                {t("common.actions.copyUrl")}
               </button>
             </p>
           )}
@@ -507,7 +513,11 @@ export default function MonthlyDetails() {
                         onClick={() => handleSave(dateKey)}
                         disabled={saveLoading === dateKey}
                       >
-                        {saveLoading === dateKey ? "Saving..." : state.isNew ? "Create" : "Save"}
+                        {saveLoading === dateKey
+                          ? t("common.actions.saving")
+                          : state.isNew
+                            ? t("common.actions.create")
+                            : t("common.actions.save")}
                       </button>
                     )}{" "}
                     {!state.isNew && (
@@ -516,7 +526,9 @@ export default function MonthlyDetails() {
                         onClick={() => handleDelete(dateKey)}
                         disabled={deleteLoading === dateKey}
                       >
-                        {deleteLoading === dateKey ? "Deleting..." : "Delete"}
+                        {deleteLoading === dateKey
+                          ? t("common.actions.deleting")
+                          : t("common.actions.delete")}
                       </button>
                     )}
                   </td>

@@ -1,3 +1,4 @@
+import { I18nextProvider } from "react-i18next";
 import {
   isRouteErrorResponse,
   Links,
@@ -10,6 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Navigation } from "./components/Navigation";
+import i18n from "./i18n/config";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -34,7 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

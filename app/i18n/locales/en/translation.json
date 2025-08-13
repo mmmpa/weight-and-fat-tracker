@@ -1,0 +1,200 @@
+{
+  "common": {
+    "appTitle": "Weight & Fat Tracker",
+    "navigation": {
+      "home": "Home",
+      "graph": "Graph",
+      "monthly": "Monthly",
+      "config": "Config"
+    },
+    "units": {
+      "kg": "kg",
+      "percent": "%",
+      "na": "N/A"
+    },
+    "actions": {
+      "save": "Save",
+      "saving": "Saving...",
+      "create": "Create",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "export": "Export All Records",
+      "back": "Back",
+      "backToHome": "Back to Home",
+      "backToMonthly": "[Back to Monthly]",
+      "clear": "Clear Configuration",
+      "copyUrl": "Copy Share URL"
+    },
+    "status": {
+      "loading": "Loading...",
+      "processing": "Processing...",
+      "error": "Error:",
+      "status": "Status:"
+    },
+    "table": {
+      "date": "Date",
+      "weight": "Weight (kg)",
+      "fatPercent": "Fat %",
+      "fatWeight": "Fat Weight (kg)",
+      "leanMass": "Lean Mass (kg)",
+      "actions": "Actions"
+    },
+    "form": {
+      "weightPlaceholder": "Weight",
+      "fatPlaceholder": "Fat %"
+    },
+    "dateLabels": {
+      "today": "(TODAY)",
+      "dateRange": "Date Range",
+      "startDate": "Start Date:",
+      "endDate": "End Date:"
+    }
+  },
+  "home": {
+    "title": "Dashboard",
+    "meta": "Track your weight and body fat percentage",
+    "quickLinks": {
+      "title": "Quick Links",
+      "monthly": "[Monthly Records]",
+      "graph": "[View Graph]",
+      "exportImport": "[Export/Import Data]",
+      "config": "[Database Configuration]"
+    },
+    "summary": {
+      "title": "Summary",
+      "totalRecords": "Total Records:",
+      "latestWeight": "Latest Weight:",
+      "latestFat": "Latest Fat %:"
+    },
+    "recentRecords": "Recent Records"
+  },
+  "monthly": {
+    "title": "Monthly Records",
+    "noRecords": "No records found. Use the monthly view to add your first record.",
+    "quickLink": "Quick link:",
+    "currentMonth": "Current Month",
+    "availableMonths": "Available Months",
+    "record": "record",
+    "records": "records",
+    "detailTitle": "{{year}}/{{month}} Records",
+    "summary": {
+      "title": "Summary",
+      "records": "Records:",
+      "avgWeight": "Avg Weight:",
+      "avgFat": "Avg Fat:",
+      "weightChange": "Weight Change:",
+      "fatChange": "Fat Change:"
+    },
+    "showingDays": "Showing all {{totalDays}} days in {{year}}/{{month}} ({{daysWithData}} with data)",
+    "graphs": {
+      "trends": "Trends",
+      "weightFat": "Weight & Fat Weight"
+    }
+  },
+  "graph": {
+    "title": "Weight & Fat Percentage Graph",
+    "useDateRange": "Use date range filter",
+    "recordsRange": "Records from {{startDate}} to {{endDate}}",
+    "allRecords": "All Records",
+    "weightFatRange": "Weight & Fat Weight from {{startDate}} to {{endDate}}",
+    "weightFatAll": "Weight & Fat Weight - All Records",
+    "legend": "← Older records on the left | Newer records on the right →"
+  },
+  "exportImport": {
+    "title": "Export/Import Weight Records",
+    "export": {
+      "title": "Export Data",
+      "description": "Download all your weight records as a JSON file."
+    },
+    "import": {
+      "title": "Import Data",
+      "description": "Import weight records from a JSON file. Existing records will be updated, new records will be added.",
+      "complete": "Import complete: {{new}} new records, {{updated}} updated, {{failed}} failed"
+    },
+    "fileFormat": {
+      "title": "File Format",
+      "description": "The JSON file should contain an array of weight records:"
+    }
+  },
+  "config": {
+    "title": "Database Configuration",
+    "description": "Configure your Turso database connection. The system will automatically test the connection and create required tables when you save the configuration.",
+    "currentConfig": "Current Configuration",
+    "dbUrl": "Database URL:",
+    "authToken": "Auth Token (optional):",
+    "notConfigured": "(not configured)",
+    "configured": "****** (configured)",
+    "notSet": "(not set)",
+    "saveButton": "Save Configuration & Initialize Tables",
+    "testing": "Testing Connection & Creating Tables...",
+    "success": "Database configuration saved and tables initialized successfully!",
+    "cleared": "Configuration cleared.",
+    "initialization": {
+      "title": "Database Initialization",
+      "description": "When you save the configuration, the following tables and indexes will be created if they don't exist:",
+      "mainTable": "Main table for storing weight and fat percentage data",
+      "dateIndex": "Index for date-based queries",
+      "uniqueConstraint": "Unique constraint to prevent duplicate dates",
+      "rulesNote": "All tables include proper constraints and validation rules as defined in TURSO_TABLES.md"
+    }
+  },
+  "share": {
+    "title": "Shared Weight Data",
+    "invalidData": "Invalid or missing share data in URL.",
+    "expectedFormat": "Expected format: ?yyyymmdd-n-aaabbbccc-xxxyyyzzz",
+    "formatExplanation": {
+      "startDate": "yyyymmdd: Start date (e.g., 20240101)",
+      "digitCount": "n: Digit count for weight (3 or 4)",
+      "weightValues": "aaabbbccc: Weight values",
+      "fatValues": "xxxyyyzzz: Fat percentage values (3 digits each)"
+    },
+    "summary": "Summary",
+    "dataTable": "Data Table",
+    "dateRange": "Date Range:",
+    "graphs": {
+      "trends": "Weight & Fat % Trends",
+      "weightFat": "Weight & Fat Weight"
+    }
+  },
+  "weightGraph": {
+    "defaultTitle": "Weight & Fat Percentage Graph",
+    "noData": "No data available for graph",
+    "legend": "Legend: Blue line = Weight (kg), Red line = Fat %",
+    "dataPoints": "Data Points:",
+    "dateRange": "Date Range:",
+    "ariaLabel": "Weight and fat percentage graph",
+    "title": "Weight and fat percentage trends over time"
+  },
+  "weightAbsoluteGraph": {
+    "defaultTitle": "Weight & Fat Weight Graph",
+    "noData": "No data available for graph",
+    "legend": "Legend: Blue = Total Weight (kg), Red = Fat Weight (kg), Green = Lean Body Mass (kg)",
+    "dataPoints": "Data Points:",
+    "dateRange": "Date Range:",
+    "ariaLabel": "Weight and fat weight graph",
+    "title": "Total weight and fat weight trends over time"
+  },
+  "errors": {
+    "databaseNotConfigured": "Database not configured. Please set database configuration first.",
+    "deleteRecord": "Failed to delete record",
+    "updateRecord": "Failed to update record",
+    "saveRecord": "Failed to save record",
+    "copyUrl": "Failed to copy URL. Please copy manually:",
+    "exportFailed": "Export failed:",
+    "importFailed": "Import failed:",
+    "invalidFileFormat": "Invalid file format: expected an array of records",
+    "invalidConfig": "Invalid configuration or connection failed"
+  },
+  "validation": {
+    "invalidWeight": "Please enter a valid weight (number greater than 0)",
+    "invalidFat": "Please enter a valid fat rate (number greater than 0)",
+    "invalidWeightValue": "Invalid weight value. Please enter a number greater than 0.",
+    "invalidFatValue": "Invalid fat value. Please enter a number greater than 0."
+  },
+  "confirm": {
+    "deleteRecord": "Are you sure you want to delete this record?"
+  },
+  "success": {
+    "urlCopied": "Share URL copied to clipboard!"
+  }
+}
