@@ -5,7 +5,7 @@ import {
   DatabaseConfigSchema,
   getDatabaseConfig,
   saveDatabaseConfig,
-} from "../utils/cookies";
+} from "../utils/localStorage";
 import { testDatabaseConnection } from "../utils/turso";
 
 export default function ConfigPage() {

@@ -1,7 +1,7 @@
 import type { Client } from "@libsql/client/web";
 import { createClient } from "@libsql/client/web";
-import { getDatabaseConfig } from "./cookies";
 import { DatabaseNotConfiguredError } from "./errors";
+import { getDatabaseConfig } from "./localStorage";
 
 let tursoClient: Client | null = null;
 
