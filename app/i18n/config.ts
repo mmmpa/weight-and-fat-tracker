@@ -16,9 +16,15 @@ const resources = {
   },
 };
 
+// Get saved language from localStorage or use default
+const savedLanguage =
+  typeof window !== "undefined"
+    ? localStorage.getItem("language") || defaultLanguage
+    : defaultLanguage;
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: defaultLanguage,
+  lng: savedLanguage,
   fallbackLng: defaultLanguage,
   interpolation: {
     escapeValue: false,
@@ -26,6 +32,13 @@ i18n.use(initReactI18next).init({
   react: {
     useSuspense: false,
   },
+});
+
+// Save language changes to localStorage
+i18n.on("languageChanged", (lng) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("language", lng);
+  }
 });
 
 export default i18n;

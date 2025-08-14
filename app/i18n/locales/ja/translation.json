@@ -3,9 +3,11 @@
     "appTitle": "Weight & Fat Tracker",
     "navigation": {
       "home": "ホーム",
+      "dashboard": "ダッシュボード",
       "graph": "グラフ",
       "monthly": "月別",
-      "config": "設定"
+      "config": "設定",
+      "exportImport": "エクスポート/インポート"
     },
     "units": {
       "kg": "kg",
@@ -51,22 +53,55 @@
     }
   },
   "home": {
-    "title": "ダッシュボード",
-    "meta": "体重と体脂肪率を記録・管理",
-    "quickLinks": {
-      "title": "クイックリンク",
-      "monthly": "[月別記録]",
-      "graph": "[グラフ表示]",
-      "exportImport": "[エクスポート/インポート]",
-      "config": "[データベース設定]"
+    "title": "体重・体脂肪率トラッカー",
+    "welcome": {
+      "title": "ようこそ",
+      "description": "このシンプルなアプリケーションで体重と体脂肪率を時系列で記録・管理できます。"
     },
-    "summary": {
-      "title": "概要",
-      "totalRecords": "総記録数:",
-      "latestWeight": "最新の体重:",
-      "latestFat": "最新の体脂肪率:"
+    "features": {
+      "title": "機能",
+      "dailyTracking": {
+        "title": "日次記録",
+        "description": "毎日の体重と体脂肪率の測定値を記録"
+      },
+      "monthlyView": {
+        "title": "月別表示",
+        "description": "カレンダー形式で月別記録を表示・編集"
+      },
+      "graphs": {
+        "title": "グラフ",
+        "description": "インタラクティブなグラフで進捗と傾向を視覚化"
+      },
+      "exportImport": {
+        "title": "エクスポート/インポート",
+        "description": "データをJSONでエクスポートまたはバックアップファイルからインポート"
+      }
     },
-    "recentRecords": "最近の記録"
+    "dataStorage": {
+      "title": "データ保存",
+      "local": "全てのデータはTursoデータベースを使用してブラウザにローカル保存されます。",
+      "noBackend": "バックエンドサーバーは不要 - 全てブラウザ内で動作します。",
+      "turso": "設定セクションでデータベース接続を構成してください。"
+    },
+    "navigation": {
+      "title": "ナビゲーション",
+      "dashboard": "ダッシュボード",
+      "dashboardDesc": "概要と最近の記録を表示",
+      "monthly": "月別",
+      "monthlyDesc": "月別記録の閲覧・編集",
+      "graph": "グラフ",
+      "graphDesc": "体重と体脂肪率の傾向を表示",
+      "exportImport": "エクスポート/インポート",
+      "exportImportDesc": "データのバックアップと復元",
+      "config": "設定",
+      "configDesc": "データベースの設定とセットアップ"
+    },
+    "gettingStarted": {
+      "title": "はじめに",
+      "step1": "1. 設定セクションでデータベース接続を構成",
+      "step2": "2. 月別表示で日々の測定値の記録を開始",
+      "step3": "3. グラフ視覚化で進捗を追跡"
+    }
   },
   "monthly": {
     "title": "月別記録",

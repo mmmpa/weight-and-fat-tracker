@@ -3,9 +3,11 @@
     "appTitle": "Weight & Fat Tracker",
     "navigation": {
       "home": "Home",
+      "dashboard": "Dashboard",
       "graph": "Graph",
       "monthly": "Monthly",
-      "config": "Config"
+      "config": "Config",
+      "exportImport": "Export/Import"
     },
     "units": {
       "kg": "kg",
@@ -51,22 +53,55 @@
     }
   },
   "home": {
-    "title": "Dashboard",
-    "meta": "Track your weight and body fat percentage",
-    "quickLinks": {
-      "title": "Quick Links",
-      "monthly": "[Monthly Records]",
-      "graph": "[View Graph]",
-      "exportImport": "[Export/Import Data]",
-      "config": "[Database Configuration]"
+    "title": "Weight & Fat Tracker",
+    "welcome": {
+      "title": "Welcome",
+      "description": "Track your weight and body fat percentage over time with this simple application."
     },
-    "summary": {
-      "title": "Summary",
-      "totalRecords": "Total Records:",
-      "latestWeight": "Latest Weight:",
-      "latestFat": "Latest Fat %:"
+    "features": {
+      "title": "Features",
+      "dailyTracking": {
+        "title": "Daily Tracking",
+        "description": "Record your daily weight and fat percentage measurements"
+      },
+      "monthlyView": {
+        "title": "Monthly View",
+        "description": "View and edit your records in a calendar-style monthly format"
+      },
+      "graphs": {
+        "title": "Graphs",
+        "description": "Visualize your progress with interactive graphs and trends"
+      },
+      "exportImport": {
+        "title": "Export/Import",
+        "description": "Export your data to JSON or import from backup files"
+      }
     },
-    "recentRecords": "Recent Records"
+    "dataStorage": {
+      "title": "Data Storage",
+      "local": "All data is stored locally in your browser using a Turso database.",
+      "noBackend": "No backend server required - everything runs in your browser.",
+      "turso": "Configure your database connection in the config section."
+    },
+    "navigation": {
+      "title": "Navigation",
+      "dashboard": "Dashboard",
+      "dashboardDesc": "View summary and recent records",
+      "monthly": "Monthly",
+      "monthlyDesc": "Browse and edit records by month",
+      "graph": "Graph",
+      "graphDesc": "View weight and fat percentage trends",
+      "exportImport": "Export/Import",
+      "exportImportDesc": "Backup and restore your data",
+      "config": "Config",
+      "configDesc": "Database configuration and setup"
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "step1": "1. Configure your database connection in the Config section",
+      "step2": "2. Start recording your daily measurements in the Monthly view",
+      "step3": "3. Track your progress using the Graph visualization"
+    }
   },
   "monthly": {
     "title": "Monthly Records",

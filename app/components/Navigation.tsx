@@ -17,12 +17,17 @@ export function Navigation() {
       <p>
         {!isHomePage && (
           <>
-            <Link to="/">{t("common.navigation.home")}</Link> |
+            <Link to="/">{t("common.navigation.home")}</Link> |{" "}
+          </>
+        )}
+        {location.pathname !== "/dashboard" && (
+          <>
+            <Link to="/dashboard">{t("common.navigation.dashboard")}</Link> |{" "}
           </>
         )}
         {location.pathname !== "/graph" && (
           <>
-            <Link to="/graph">{t("common.navigation.graph")}</Link> |
+            <Link to="/graph">{t("common.navigation.graph")}</Link> |{" "}
           </>
         )}
         <Link to="/monthly">{t("common.navigation.monthly")}</Link> |{" "}

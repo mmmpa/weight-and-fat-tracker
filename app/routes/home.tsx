@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link, redirect, useLoaderData } from "react-router";
-import { getWeightRecords, getWeightRecordsStats } from "../features/weights/api";
-import { DatabaseNotConfiguredError } from "../utils/errors";
+import { Link } from "react-router";
 
 export function meta() {
   return [
@@ -10,96 +8,71 @@ export function meta() {
   ];
 }
 
-export async function clientLoader() {
-  try {
-    const [records, statsData] = await Promise.all([getWeightRecords(), getWeightRecordsStats()]);
-
-    return {
-      recentRecords: records.slice(0, 5),
-      stats: {
-        totalRecords: statsData.totalRecords,
-        latestWeight: statsData.latestWeight,
-        latestFat: statsData.latestFat,
-        weightChange: statsData.weightChange,
-        fatChange: statsData.fatChange,
-      },
-    };
-  } catch (error) {
-    if (error instanceof DatabaseNotConfiguredError) {
-      throw redirect("/config");
-    }
-    throw error;
-  }
-}
-
 export default function Home() {
-  const { recentRecords, stats } = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
 
   return (
     <div>
-      <h2>{t("home.title")}</h2>
+      <h1>{t("home.title")}</h1>
 
-      <h3>{t("home.quickLinks.title")}</h3>
+      <h2>{t("home.welcome.title")}</h2>
+      <p>{t("home.welcome.description")}</p>
+
+      <h3>{t("home.features.title")}</h3>
       <p>
-        <Link to="/monthly">{t("home.quickLinks.monthly")}</Link>
+        <strong>{t("home.features.dailyTracking.title")}</strong>
         <br />
-        <Link to="/graph">{t("home.quickLinks.graph")}</Link>
+        {t("home.features.dailyTracking.description")}
         <br />
-        <Link to="/export-import">{t("home.quickLinks.exportImport")}</Link>
         <br />
-        <Link to="/config">{t("home.quickLinks.config")}</Link>
+        <strong>{t("home.features.monthlyView.title")}</strong>
+        <br />
+        {t("home.features.monthlyView.description")}
+        <br />
+        <br />
+        <strong>{t("home.features.graphs.title")}</strong>
+        <br />
+        {t("home.features.graphs.description")}
+        <br />
+        <br />
+        <strong>{t("home.features.exportImport.title")}</strong>
+        <br />
+        {t("home.features.exportImport.description")}
       </p>
 
-      <h3>{t("home.summary.title")}</h3>
+      <h3>{t("home.dataStorage.title")}</h3>
       <p>
-        <strong>{t("home.summary.totalRecords")}</strong> {stats.totalRecords}
+        {t("home.dataStorage.local")}
         <br />
-        <strong>{t("home.summary.latestWeight")}</strong> {stats.latestWeight.toFixed(1)}{" "}
-        {t("common.units.kg")}
-        {stats.weightChange !== 0 && (
-          <span>
-            {" "}
-            ({stats.weightChange > 0 ? "+" : ""}
-            {stats.weightChange.toFixed(1)} kg)
-          </span>
-        )}
+        {t("home.dataStorage.noBackend")}
         <br />
-        <strong>{t("home.summary.latestFat")}</strong> {stats.latestFat.toFixed(1)}
-        {t("common.units.percent")}
-        {stats.fatChange !== 0 && (
-          <span>
-            {" "}
-            ({stats.fatChange > 0 ? "+" : ""}
-            {stats.fatChange.toFixed(1)}
-            {t("common.units.percent")})
-          </span>
-        )}
+        {t("home.dataStorage.turso")}
       </p>
 
-      {recentRecords.length > 0 && (
-        <div>
-          <h3>{t("home.recentRecords")}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>{t("common.table.date")}</th>
-                <th>{t("common.table.weight")}</th>
-                <th>{t("common.table.fatPercent")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentRecords.map((record) => (
-                <tr key={record.id}>
-                  <td>{new Date(record.date).toLocaleDateString()}</td>
-                  <td>{record.weight.toFixed(1)}</td>
-                  <td>{record.fat_rate.toFixed(1)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <h3>{t("home.navigation.title")}</h3>
+      <p>
+        <Link to="/dashboard">{t("home.navigation.dashboard")}</Link> -{" "}
+        {t("home.navigation.dashboardDesc")}
+        <br />
+        <Link to="/monthly">{t("home.navigation.monthly")}</Link> -{" "}
+        {t("home.navigation.monthlyDesc")}
+        <br />
+        <Link to="/graph">{t("home.navigation.graph")}</Link> - {t("home.navigation.graphDesc")}
+        <br />
+        <Link to="/export-import">{t("home.navigation.exportImport")}</Link> -{" "}
+        {t("home.navigation.exportImportDesc")}
+        <br />
+        <Link to="/config">{t("home.navigation.config")}</Link> - {t("home.navigation.configDesc")}
+      </p>
+
+      <h3>{t("home.gettingStarted.title")}</h3>
+      <p>
+        {t("home.gettingStarted.step1")}
+        <br />
+        {t("home.gettingStarted.step2")}
+        <br />
+        {t("home.gettingStarted.step3")}
+      </p>
     </div>
   );
 }
