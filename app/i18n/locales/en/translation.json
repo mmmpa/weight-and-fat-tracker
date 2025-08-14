@@ -103,6 +103,23 @@
       "step3": "3. Track your progress using the Graph visualization"
     }
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "quickLinks": {
+      "title": "Quick Links",
+      "monthly": "Monthly Records",
+      "graph": "View Graphs",
+      "exportImport": "Export/Import Data",
+      "config": "Database Configuration"
+    },
+    "summary": {
+      "title": "Summary",
+      "totalRecords": "Total Records:",
+      "latestWeight": "Latest Weight:",
+      "latestFat": "Latest Fat %:"
+    },
+    "recentRecords": "Recent Records"
+  },
   "monthly": {
     "title": "Monthly Records",
     "noRecords": "No records found. Use the monthly view to add your first record.",

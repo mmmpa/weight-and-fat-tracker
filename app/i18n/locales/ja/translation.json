@@ -79,7 +79,7 @@
     },
     "dataStorage": {
       "title": "データ保存",
-      "local": "全てのデータはTursoデータベースを使用してブラウザにローカル保存されます。",
+      "local": "全てのデータはTursoデータベースを使用して保存されます。",
       "noBackend": "バックエンドサーバーは不要 - 全てブラウザ内で動作します。",
       "turso": "設定セクションでデータベース接続を構成してください。"
     },
@@ -102,6 +102,23 @@
       "step2": "2. 月別表示で日々の測定値の記録を開始",
       "step3": "3. グラフ視覚化で進捗を追跡"
     }
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "quickLinks": {
+      "title": "クイックリンク",
+      "monthly": "月別記録",
+      "graph": "グラフ表示",
+      "exportImport": "エクスポート/インポート",
+      "config": "データベース設定"
+    },
+    "summary": {
+      "title": "概要",
+      "totalRecords": "総記録数:",
+      "latestWeight": "最新体重:",
+      "latestFat": "最新体脂肪率:"
+    },
+    "recentRecords": "最近の記録"
   },
   "monthly": {
     "title": "月別記録",

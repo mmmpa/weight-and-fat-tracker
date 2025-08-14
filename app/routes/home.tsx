@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 
 export function meta() {
   return [
@@ -44,25 +43,7 @@ export default function Home() {
       <p>
         {t("home.dataStorage.local")}
         <br />
-        {t("home.dataStorage.noBackend")}
-        <br />
         {t("home.dataStorage.turso")}
-      </p>
-
-      <h3>{t("home.navigation.title")}</h3>
-      <p>
-        <Link to="/dashboard">{t("home.navigation.dashboard")}</Link> -{" "}
-        {t("home.navigation.dashboardDesc")}
-        <br />
-        <Link to="/monthly">{t("home.navigation.monthly")}</Link> -{" "}
-        {t("home.navigation.monthlyDesc")}
-        <br />
-        <Link to="/graph">{t("home.navigation.graph")}</Link> - {t("home.navigation.graphDesc")}
-        <br />
-        <Link to="/export-import">{t("home.navigation.exportImport")}</Link> -{" "}
-        {t("home.navigation.exportImportDesc")}
-        <br />
-        <Link to="/config">{t("home.navigation.config")}</Link> - {t("home.navigation.configDesc")}
       </p>
 
       <h3>{t("home.gettingStarted.title")}</h3>

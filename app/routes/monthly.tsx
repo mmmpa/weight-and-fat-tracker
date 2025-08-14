@@ -34,17 +34,16 @@ export default function Monthly() {
     <div>
       <h2>{t("monthly.title")}</h2>
 
+      <p>
+        <Link to={`/monthly/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}>
+          {t("monthly.currentMonth")} ({currentYear}/{currentMonth.toString().padStart(2, "0")})
+        </Link>
+      </p>
+
       {availableMonths.length === 0 ? (
         <p>{t("monthly.noRecords")}</p>
       ) : (
         <div>
-          <p>
-            <strong>{t("monthly.quickLink")}</strong>{" "}
-            <Link to={`/monthly/${currentYear}/${currentMonth}`}>
-              {t("monthly.currentMonth")} ({currentYear}/{currentMonth.toString().padStart(2, "0")})
-            </Link>
-          </p>
-
           <h3>{t("monthly.availableMonths")}</h3>
           <ul>
             {availableMonths.map(

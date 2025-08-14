@@ -36,19 +36,19 @@ export default function Dashboard() {
   const { recentRecords, stats } = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
 
+  // Get current month for quick link
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+
   return (
     <div>
       <h2>{t("dashboard.title")}</h2>
 
-      <h3>{t("dashboard.quickLinks.title")}</h3>
       <p>
-        <Link to="/monthly">{t("dashboard.quickLinks.monthly")}</Link>
-        <br />
-        <Link to="/graph">{t("dashboard.quickLinks.graph")}</Link>
-        <br />
-        <Link to="/export-import">{t("dashboard.quickLinks.exportImport")}</Link>
-        <br />
-        <Link to="/config">{t("dashboard.quickLinks.config")}</Link>
+        <Link to={`/monthly/${currentYear}/${currentMonth}`}>
+          {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
+        </Link>
       </p>
 
       <h3>{t("dashboard.summary.title")}</h3>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { redirect, useLoaderData } from "react-router";
+import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
 import { getWeightRecords, getWeightRecordsByDateRange } from "../features/weights/api";
@@ -87,9 +87,20 @@ export default function Graph() {
       </div>
     );
 
+  // Get current month for redirect link
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+
   return (
     <div>
       <h2>{t("graph.title")}</h2>
+
+      <p>
+        <Link to={`/monthly/${currentYear}/${currentMonth}`}>
+          {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
+        </Link>
+      </p>
 
       <div style={{ marginBottom: "20px" }}>
         <h3>{t("common.dateLabels.dateRange")}</h3>
