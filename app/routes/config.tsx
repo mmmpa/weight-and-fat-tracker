@@ -147,26 +147,6 @@ export default function ConfigPage() {
           </tbody>
         </table>
       </div>
-
-      <hr style={{ margin: "30px 0" }} />
-
-      <div>
-        <h3>{t("config.initialization.title")}</h3>
-        <p>{t("config.initialization.description")}</p>
-        <ul>
-          <li>
-            <strong>weight_records</strong> - {t("config.initialization.mainTable")}
-          </li>
-          <li>
-            <strong>idx_weight_records_date</strong> - {t("config.initialization.dateIndex")}
-          </li>
-          <li>
-            <strong>idx_weight_records_date_unique</strong> -{" "}
-            {t("config.initialization.uniqueConstraint")}
-          </li>
-        </ul>
-        <p>{t("config.initialization.rulesNote")}</p>
-      </div>
     </div>
   );
 }

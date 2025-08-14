@@ -180,15 +180,7 @@
     "saveButton": "Save Configuration & Initialize Tables",
     "testing": "Testing Connection & Creating Tables...",
     "success": "Database configuration saved and tables initialized successfully!",
-    "cleared": "Configuration cleared.",
-    "initialization": {
-      "title": "Database Initialization",
-      "description": "When you save the configuration, the following tables and indexes will be created if they don't exist:",
-      "mainTable": "Main table for storing weight and fat percentage data",
-      "dateIndex": "Index for date-based queries",
-      "uniqueConstraint": "Unique constraint to prevent duplicate dates",
-      "rulesNote": "All tables include proper constraints and validation rules as defined in TURSO_TABLES.md"
-    }
+    "cleared": "Configuration cleared."
   },
   "share": {
     "title": "Shared Weight Data",

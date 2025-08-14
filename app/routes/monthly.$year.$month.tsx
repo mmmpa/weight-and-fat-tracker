@@ -458,11 +458,6 @@ export default function MonthlyDetails() {
       )}
 
       <div>
-        <p>
-          Showing all {sortedDateKeys.length} days in {yearNum}/
-          {monthNum.toString().padStart(2, "0")} ({records.length} with data)
-        </p>
-
         <table>
           <thead>
             <tr>
