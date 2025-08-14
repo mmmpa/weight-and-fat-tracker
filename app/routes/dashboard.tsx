@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { getWeightRecords, getWeightRecordsStats } from "../features/weights/api";
 import { DatabaseNotConfiguredError } from "../utils/errors";
+import { getCurrentMonthPath } from "../utils/navigation";
 
 export function meta() {
   return [
@@ -36,7 +37,7 @@ export default function Dashboard() {
   const { recentRecords, stats } = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
 
-  // Get current month for quick link
+  // Get current month for display
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -46,7 +47,7 @@ export default function Dashboard() {
       <h2>{t("dashboard.title")}</h2>
 
       <p>
-        <Link to={`/monthly/${currentYear}/${currentMonth}`}>
+        <Link to={getCurrentMonthPath()}>
           {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
         </Link>
       </p>

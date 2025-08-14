@@ -6,10 +6,17 @@ import { WeightGraph } from "../components/WeightGraph";
 import { getWeightRecords, getWeightRecordsByDateRange } from "../features/weights/api";
 import type { WeightRecord } from "../features/weights/types";
 import { DatabaseNotConfiguredError } from "../utils/errors";
+import { redirectToCurrentMonth } from "../utils/navigation";
 
 export async function clientLoader() {
   try {
     const data = await getWeightRecords();
+
+    // Redirect to current month if no records exist
+    if (data.length === 0) {
+      throw redirectToCurrentMonth();
+    }
+
     // Reverse to show chronologically (old to new)
     const reversedData = data.reverse();
     // Filter out records with 0 values for weight or fat_rate

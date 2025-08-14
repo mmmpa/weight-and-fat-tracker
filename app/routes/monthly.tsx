@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { getAvailableMonths } from "../features/weights/api";
 import { DatabaseNotConfiguredError } from "../utils/errors";
+import { redirectToCurrentMonth } from "../utils/navigation";
 
 export function meta() {
   return [
@@ -13,6 +14,12 @@ export function meta() {
 export async function clientLoader() {
   try {
     const availableMonths = await getAvailableMonths();
+
+    // Redirect to current month if no records exist
+    if (availableMonths.length === 0) {
+      throw redirectToCurrentMonth();
+    }
+
     return { availableMonths };
   } catch (error) {
     if (error instanceof DatabaseNotConfiguredError) {
