@@ -36,7 +36,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+        <div id="root">
+          <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
