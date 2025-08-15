@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getWeightRecords, saveWeightRecord } from "../features/weights/api";
-import { CreateWeightRecordInputSchema } from "../features/weights/types";
+import {
+  downloadExportFile,
+  exportWeightRecords,
+  importWeightRecords,
+} from "../features/export-import/api";
 
 export default function ExportImport() {
   const { t } = useTranslation();
@@ -10,17 +13,8 @@ export default function ExportImport() {
 
   const handleExport = async () => {
     try {
-      const records = await getWeightRecords();
-      const dataStr = JSON.stringify(records, null, 2);
-      const dataBlob = new Blob([dataStr], { type: "application/json" });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `weight-records-${new Date().toISOString().split("T")[0]}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const exportData = await exportWeightRecords();
+      downloadExportFile(exportData);
     } catch (error) {
       alert(`Export failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
@@ -35,32 +29,8 @@ export default function ExportImport() {
 
     try {
       const text = await file.text();
-      const data = JSON.parse(text);
-
-      if (!Array.isArray(data)) {
-        throw new Error("Invalid file format: expected an array of records");
-      }
-
-      let successful = 0;
-      let failed = 0;
-
-      for (const record of data) {
-        try {
-          const validatedInput = CreateWeightRecordInputSchema.parse({
-            date: record.date,
-            weight: record.weight,
-            fat_rate: record.fat_rate,
-          });
-
-          await saveWeightRecord(validatedInput);
-          successful++;
-        } catch (error) {
-          failed++;
-          console.error(`Failed to import record for date ${record.date}:`, error);
-        }
-      }
-
-      setImportStatus(`Import complete: ${successful} records processed, ${failed} failed`);
+      const result = await importWeightRecords(text);
+      setImportStatus(result.message);
     } catch (error) {
       setImportStatus(`Import failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
@@ -102,21 +72,27 @@ export default function ExportImport() {
       <br />
 
       <h3>File Format</h3>
-      <p>The JSON file should contain an array of weight records:</p>
+      <p>The JSON file should contain a version field and records array:</p>
       <pre style={{ border: "1px solid black", padding: "10px", backgroundColor: "#f5f5f5" }}>
-        {`[
-  {
-    "date": "2024-01-15",
-    "weight": 70.5,
-    "fat_rate": 18.5
-  },
-  {
-    "date": "2024-01-16",
-    "weight": 70.3,
-    "fat_rate": 18.4
-  }
-]`}
+        {`{
+  "version": 1,
+  "records": [
+    {
+      "date": "2024-01-15",
+      "weight": 70.5,
+      "fat_rate": 18.5
+    },
+    {
+      "date": "2024-01-16",
+      "weight": 70.3,
+      "fat_rate": 18.4
+    }
+  ]
+}`}
       </pre>
+      <p>
+        <em>Note: The old format (plain array) is still supported for import.</em>
+      </p>
 
       <br />
       <a href="/">{t("common.actions.backToHome")}</a>
