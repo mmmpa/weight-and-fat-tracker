@@ -35,7 +35,6 @@ export function generateShareUrl(records: WeightRecord[], origin: string): strin
       } else {
         // Fill with previous date's data
         filledRecords.push({
-          id: previousRecord.id,
           date: currentDateStr,
           weight: previousRecord.weight,
           fat_rate: previousRecord.fat_rate,
@@ -138,7 +137,6 @@ export function parseShareData(queryString: string): WeightRecord[] | null {
     const dateStr = currentDate.toISOString().split("T")[0];
 
     records.push({
-      id: `shared-${i}`,
       date: dateStr,
       weight: weightValues[i],
       fat_rate: fatValues[i],

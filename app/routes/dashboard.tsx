@@ -91,7 +91,7 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {recentRecords.map((record) => (
-                <tr key={record.id}>
+                <tr key={record.date}>
                   <td>{new Date(record.date).toLocaleDateString()}</td>
                   <td>{record.weight.toFixed(1)}</td>
                   <td>{record.fat_rate.toFixed(1)}</td>

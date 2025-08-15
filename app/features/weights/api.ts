@@ -1,4 +1,4 @@
-import { getTursoClient } from "../../utils/turso";
+import { getTursoClient, resetDatabase } from "../../utils/turso";
 import {
   type CreateWeightRecordInput,
   CreateWeightRecordInputSchema,
@@ -8,26 +8,11 @@ import {
   WeightRecordSchema,
 } from "./types";
 
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
 export async function getWeightRecords(): Promise<WeightRecord[]> {
   const turso = await getTursoClient();
   const result = await turso.execute("SELECT * FROM weight_records ORDER BY date DESC");
 
   return result.rows.map((row) => WeightRecordSchema.parse(row));
-}
-
-export async function getWeightRecordById(id: string): Promise<WeightRecord | null> {
-  const turso = await getTursoClient();
-  const result = await turso.execute({
-    sql: "SELECT * FROM weight_records WHERE id = ?",
-    args: [id],
-  });
-
-  if (!result.rows[0]) return null;
-  return WeightRecordSchema.parse(result.rows[0]);
 }
 
 export async function getWeightRecordByDate(date: string): Promise<WeightRecord | null> {
@@ -41,22 +26,27 @@ export async function getWeightRecordByDate(date: string): Promise<WeightRecord 
   return WeightRecordSchema.parse(result.rows[0]);
 }
 
+/**
+ * @deprecated Use saveWeightRecord instead
+ */
 export async function createWeightRecord(input: CreateWeightRecordInput): Promise<WeightRecord> {
   // Validate input with Zod
   const validatedInput = CreateWeightRecordInputSchema.parse(input);
 
-  const id = generateId();
   const turso = await getTursoClient();
   const result = await turso.execute({
-    sql: "INSERT INTO weight_records (id, date, weight, fat_rate) VALUES (?, ?, ?, ?) RETURNING *",
-    args: [id, validatedInput.date, validatedInput.weight, validatedInput.fat_rate],
+    sql: "INSERT INTO weight_records (date, weight, fat_rate) VALUES (?, ?, ?) RETURNING *",
+    args: [validatedInput.date, validatedInput.weight, validatedInput.fat_rate],
   });
 
   return WeightRecordSchema.parse(result.rows[0]);
 }
 
+/**
+ * @deprecated Use saveWeightRecord instead
+ */
 export async function updateWeightRecord(
-  id: string,
+  date: string,
   input: UpdateWeightRecordInput
 ): Promise<WeightRecord | null> {
   // Validate input with Zod
@@ -65,10 +55,6 @@ export async function updateWeightRecord(
   const setClauses = [];
   const args = [];
 
-  if (validatedInput.date !== undefined) {
-    setClauses.push("date = ?");
-    args.push(validatedInput.date);
-  }
   if (validatedInput.weight !== undefined) {
     setClauses.push("weight = ?");
     args.push(validatedInput.weight);
@@ -79,14 +65,14 @@ export async function updateWeightRecord(
   }
 
   if (setClauses.length === 0) {
-    return getWeightRecordById(id);
+    return getWeightRecordByDate(date);
   }
 
-  args.push(id);
+  args.push(date);
 
   const turso = await getTursoClient();
   const result = await turso.execute({
-    sql: `UPDATE weight_records SET ${setClauses.join(", ")} WHERE id = ? RETURNING *`,
+    sql: `UPDATE weight_records SET ${setClauses.join(", ")} WHERE date = ? RETURNING *`,
     args,
   });
 
@@ -94,11 +80,11 @@ export async function updateWeightRecord(
   return WeightRecordSchema.parse(result.rows[0]);
 }
 
-export async function deleteWeightRecord(id: string): Promise<boolean> {
+export async function deleteWeightRecord(date: string): Promise<boolean> {
   const turso = await getTursoClient();
   const result = await turso.execute({
-    sql: "DELETE FROM weight_records WHERE id = ?",
-    args: [id],
+    sql: "DELETE FROM weight_records WHERE date = ?",
+    args: [date],
   });
 
   return result.rowsAffected > 0;
@@ -232,4 +218,26 @@ export async function getAvailableMonths(): Promise<
   });
 
   return result.sort((a, b) => b.year - a.year || b.month - a.month);
+}
+
+export async function resetWeightDatabase(): Promise<void> {
+  await resetDatabase();
+}
+
+export async function saveWeightRecord(input: CreateWeightRecordInput): Promise<WeightRecord> {
+  // Validate input with Zod
+  const validatedInput = CreateWeightRecordInputSchema.parse(input);
+
+  const turso = await getTursoClient();
+  const result = await turso.execute({
+    sql: `INSERT INTO weight_records (date, weight, fat_rate) 
+          VALUES (?, ?, ?) 
+          ON CONFLICT(date) DO UPDATE SET 
+            weight = excluded.weight,
+            fat_rate = excluded.fat_rate
+          RETURNING *`,
+    args: [validatedInput.date, validatedInput.weight, validatedInput.fat_rate],
+  });
+
+  return WeightRecordSchema.parse(result.rows[0]);
 }

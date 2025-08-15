@@ -29,25 +29,32 @@ export async function initializeTables(client?: Client): Promise<void> {
     // Create weight_records table
     await turso.execute(`
       CREATE TABLE IF NOT EXISTS weight_records (
-        id TEXT PRIMARY KEY NOT NULL,
-        date DATE NOT NULL,
+        date DATE PRIMARY KEY NOT NULL,
         weight REAL NOT NULL CHECK (weight > 0 AND weight <= 500),
         fat_rate REAL NOT NULL CHECK (fat_rate >= 0 AND fat_rate <= 100)
       )
-    `);
-
-    // Create indexes
-    await turso.execute(`
-      CREATE INDEX IF NOT EXISTS idx_weight_records_date ON weight_records(date)
-    `);
-
-    await turso.execute(`
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_weight_records_date_unique ON weight_records(date)
     `);
   } catch (error) {
     console.error("Failed to initialize tables:", error);
     throw new Error(
       `Table initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+  }
+}
+
+export async function resetDatabase(client?: Client): Promise<void> {
+  const turso = client || (await getTursoClient());
+
+  try {
+    // Drop the table if it exists
+    await turso.execute("DROP TABLE IF EXISTS weight_records");
+
+    // Recreate the table
+    await initializeTables(turso);
+  } catch (error) {
+    console.error("Failed to reset database:", error);
+    throw new Error(
+      `Database reset failed: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }

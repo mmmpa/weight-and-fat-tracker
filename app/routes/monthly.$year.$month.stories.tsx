@@ -8,19 +8,16 @@ import type { WeightRecord } from "../features/weights/types";
 // Sample weight record data for the stories
 const sampleJanuaryRecords: WeightRecord[] = [
   {
-    id: "1",
     date: "2024-01-01",
     weight: 75.0,
     fat_rate: 20.0,
   },
   {
-    id: "2",
     date: "2024-01-15",
     weight: 74.5,
     fat_rate: 19.8,
   },
   {
-    id: "3",
     date: "2024-01-31",
     weight: 74.0,
     fat_rate: 19.5,
@@ -158,7 +155,7 @@ function MockMonthlyDetail({
                       {record && (
                         <>
                           {" "}
-                          <button type="button" onClick={() => handleDelete(record.id)}>
+                          <button type="button" onClick={() => handleDelete(record.date)}>
                             Delete
                           </button>
                         </>
@@ -232,15 +229,7 @@ export const FullMonth: Story = {
   args: {
     year: 2024,
     month: 3,
-    records: [
-      { id: "1", date: "2024-03-01", weight: 75.0, fat_rate: 20.0 },
-      { id: "2", date: "2024-03-05", weight: 74.8, fat_rate: 19.9 },
-      { id: "3", date: "2024-03-10", weight: 74.5, fat_rate: 19.7 },
-      { id: "4", date: "2024-03-15", weight: 74.2, fat_rate: 19.5 },
-      { id: "5", date: "2024-03-20", weight: 74.0, fat_rate: 19.3 },
-      { id: "6", date: "2024-03-25", weight: 73.8, fat_rate: 19.1 },
-      { id: "7", date: "2024-03-31", weight: 73.5, fat_rate: 19.0 },
-    ],
+    records: [],
   },
 };
 
@@ -248,10 +237,6 @@ export const February2024LeapYear: Story = {
   args: {
     year: 2024,
     month: 2, // February 2024 has 29 days (leap year)
-    records: [
-      { id: "1", date: "2024-02-01", weight: 76.0, fat_rate: 20.5 },
-      { id: "2", date: "2024-02-14", weight: 75.5, fat_rate: 20.2 },
-      { id: "3", date: "2024-02-29", weight: 75.0, fat_rate: 20.0 },
-    ],
+    records: [],
   },
 };

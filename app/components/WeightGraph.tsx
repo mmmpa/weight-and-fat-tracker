@@ -108,7 +108,7 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
 
           return (
             <line
-              key={`v-${record.id}`}
+              key={`v-${record.date}`}
               x1={xScale(index)}
               y1={chartHeight - bottomPadding}
               x2={xScale(index)}
@@ -175,7 +175,7 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
 
           return (
             <text
-              key={`date-${record.id}`}
+              key={`date-${record.date}`}
               x={xScale(index)}
               y={chartHeight - bottomPadding + 15}
               textAnchor="start"

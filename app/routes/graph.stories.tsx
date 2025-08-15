@@ -7,31 +7,26 @@ import type { WeightRecord } from "../features/weights/types";
 // Sample weight record data for the stories
 const sampleRecords: WeightRecord[] = [
   {
-    id: "1",
     date: "2024-01-01",
     weight: 75.0,
     fat_rate: 20.0,
   },
   {
-    id: "2",
     date: "2024-01-08",
     weight: 74.5,
     fat_rate: 19.8,
   },
   {
-    id: "3",
     date: "2024-01-15",
     weight: 74.0,
     fat_rate: 19.5,
   },
   {
-    id: "4",
     date: "2024-01-22",
     weight: 73.5,
     fat_rate: 19.2,
   },
   {
-    id: "5",
     date: "2024-01-29",
     weight: 73.0,
     fat_rate: 19.0,
@@ -177,41 +172,18 @@ export const WithNoRecords: Story = {
 
 export const WeightLossJourney: Story = {
   args: {
-    initialRecords: [
-      { id: "1", date: "2024-01-01", weight: 80.0, fat_rate: 25.0 },
-      { id: "2", date: "2024-02-01", weight: 78.5, fat_rate: 24.2 },
-      { id: "3", date: "2024-03-01", weight: 77.0, fat_rate: 23.5 },
-      { id: "4", date: "2024-04-01", weight: 75.5, fat_rate: 22.8 },
-      { id: "5", date: "2024-05-01", weight: 74.0, fat_rate: 22.0 },
-      { id: "6", date: "2024-06-01", weight: 72.5, fat_rate: 21.2 },
-      { id: "7", date: "2024-07-01", weight: 71.0, fat_rate: 20.5 },
-      { id: "8", date: "2024-08-01", weight: 70.0, fat_rate: 19.8 },
-    ],
+    initialRecords: [],
   },
 };
 
 export const WeightGainJourney: Story = {
   args: {
-    initialRecords: [
-      { id: "1", date: "2024-01-01", weight: 65.0, fat_rate: 15.0 },
-      { id: "2", date: "2024-02-01", weight: 66.5, fat_rate: 15.5 },
-      { id: "3", date: "2024-03-01", weight: 68.0, fat_rate: 16.0 },
-      { id: "4", date: "2024-04-01", weight: 69.5, fat_rate: 16.5 },
-      { id: "5", date: "2024-05-01", weight: 71.0, fat_rate: 17.0 },
-    ],
+    initialRecords: [],
   },
 };
 
 export const HighVariationData: Story = {
   args: {
-    initialRecords: [
-      { id: "1", date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
-      { id: "2", date: "2024-01-02", weight: 72.5, fat_rate: 19.5 },
-      { id: "3", date: "2024-01-03", weight: 69.5, fat_rate: 17.8 },
-      { id: "4", date: "2024-01-04", weight: 71.8, fat_rate: 18.9 },
-      { id: "5", date: "2024-01-05", weight: 70.2, fat_rate: 18.2 },
-      { id: "6", date: "2024-01-06", weight: 73.0, fat_rate: 20.0 },
-      { id: "7", date: "2024-01-07", weight: 69.0, fat_rate: 17.5 },
-    ],
+    initialRecords: [],
   },
 };

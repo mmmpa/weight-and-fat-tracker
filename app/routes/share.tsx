@@ -103,7 +103,7 @@ export default function Share() {
             const dayOfWeek = recordDate.toLocaleDateString("en-US", { weekday: "short" });
 
             return (
-              <tr key={record.id}>
+              <tr key={record.date}>
                 <td>
                   {recordDate.toLocaleDateString()} ({dayOfWeek})
                 </td>

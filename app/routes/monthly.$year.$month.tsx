@@ -5,18 +5,16 @@ import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
 import { generateShareUrl } from "../features/share/utils";
 import {
-  createWeightRecord,
   deleteWeightRecord,
   getMonthlyStats,
   getWeightRecordsByMonth,
-  updateWeightRecord,
+  saveWeightRecord,
 } from "../features/weights/api";
 import type { WeightRecord } from "../features/weights/types";
 import { DatabaseNotConfiguredError } from "../utils/errors";
 import type { Route } from "./+types/monthly.$year.$month";
 
 interface RecordState {
-  id: string | null; // null for new records
   date: string;
   weight: string;
   fat: string;
@@ -70,7 +68,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
       if (existingRecord) {
         // Existing record
         initialStates[date] = {
-          id: existingRecord.id,
           date: date,
           weight: existingRecord.weight.toString(),
           fat: existingRecord.fat_rate.toString(),
@@ -80,7 +77,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
       } else {
         // New empty record
         initialStates[date] = {
-          id: null,
           date: date,
           weight: "",
           fat: "",
@@ -123,21 +119,20 @@ export default function MonthlyDetails() {
 
   async function handleDelete(dateKey: string) {
     const state = recordStates[dateKey];
-    if (!state || !state.id) return;
+    if (!state || state.isNew) return;
 
     if (!confirm(t("confirm.deleteRecord"))) return;
 
     try {
       setDeleteLoading(dateKey);
-      const success = await deleteWeightRecord(state.id);
+      const success = await deleteWeightRecord(state.date);
       if (success) {
-        setRecords(records.filter((r) => r.id !== state.id));
+        setRecords(records.filter((r) => r.date !== state.date));
 
         // Reset to empty state
         setRecordStates({
           ...recordStates,
           [dateKey]: {
-            id: null,
             date: state.date,
             weight: "",
             fat: "",
@@ -170,7 +165,7 @@ export default function MonthlyDetails() {
     if (Number.isNaN(weight) || weight <= 0) {
       let originalWeight = "";
       if (!state.isNew) {
-        const originalRecord = records.find((r) => r.id === state.id);
+        const originalRecord = records.find((r) => r.date === state.date);
         if (originalRecord) {
           originalWeight = originalRecord.weight.toString();
         }
@@ -186,7 +181,7 @@ export default function MonthlyDetails() {
             state.fat !==
               (state.isNew
                 ? ""
-                : records.find((r) => r.id === state.id)?.fat_rate.toString() || ""),
+                : records.find((r) => r.date === state.date)?.fat_rate.toString() || ""),
         },
       });
 
@@ -197,7 +192,7 @@ export default function MonthlyDetails() {
     if (Number.isNaN(fat) || fat <= 0) {
       let originalFat = "";
       if (!state.isNew) {
-        const originalRecord = records.find((r) => r.id === state.id);
+        const originalRecord = records.find((r) => r.date === state.date);
         if (originalRecord) {
           originalFat = originalRecord.fat_rate.toString();
         }
@@ -212,7 +207,7 @@ export default function MonthlyDetails() {
             state.weight !==
               (state.isNew
                 ? ""
-                : records.find((r) => r.id === state.id)?.weight.toString() || "") &&
+                : records.find((r) => r.date === state.date)?.weight.toString() || "") &&
             originalFat !== state.weight,
         },
       });
@@ -224,48 +219,32 @@ export default function MonthlyDetails() {
     try {
       setSaveLoading(dateKey);
 
+      // Save (create or update) record
+      const savedRecord = await saveWeightRecord({
+        date: state.date,
+        weight: weight,
+        fat_rate: fat,
+      });
+
       if (state.isNew) {
-        // Create new record
-        const newRecord = await createWeightRecord({
-          date: state.date,
-          weight: weight,
-          fat_rate: fat,
-        });
-
-        setRecords([...records, newRecord]);
-        setRecordStates({
-          ...recordStates,
-          [dateKey]: {
-            id: newRecord.id,
-            date: state.date,
-            weight: weight.toString(),
-            fat: fat.toString(),
-            hasChanges: false,
-            isNew: false,
-          },
-        });
+        // Add new record to the list
+        setRecords([...records, savedRecord]);
       } else {
-        // Update existing record
-        const updatedRecord = await updateWeightRecord(state.id!, {
-          date: state.date,
-          weight: weight,
-          fat_rate: fat,
-        });
-
-        if (updatedRecord) {
-          setRecords(records.map((r) => (r.id === state.id ? updatedRecord : r)));
-          setRecordStates({
-            ...recordStates,
-            [dateKey]: {
-              ...state,
-              hasChanges: false,
-            },
-          });
-        } else {
-          alert(t("errors.updateRecord"));
-          return;
-        }
+        // Update existing record in the list
+        setRecords(records.map((r) => (r.date === state.date ? savedRecord : r)));
       }
+
+      // Update state
+      setRecordStates({
+        ...recordStates,
+        [dateKey]: {
+          date: state.date,
+          weight: weight.toString(),
+          fat: fat.toString(),
+          hasChanges: false,
+          isNew: false,
+        },
+      });
 
       // Refresh stats
       const newStats = await getMonthlyStats(yearNum, monthNum);
@@ -291,7 +270,7 @@ export default function MonthlyDetails() {
       hasChanges = newState.weight !== "" && newState.fat !== "";
     } else {
       // For existing records, compare with original values
-      const originalRecord = records.find((r) => r.id === currentState.id);
+      const originalRecord = records.find((r) => r.date === currentState.date);
       if (originalRecord) {
         hasChanges =
           newState.weight !== originalRecord.weight.toString() ||
@@ -325,7 +304,7 @@ export default function MonthlyDetails() {
       if (currentState.isNew) {
         originalValue = "";
       } else {
-        const originalRecord = records.find((r) => r.id === currentState.id);
+        const originalRecord = records.find((r) => r.date === currentState.date);
         if (originalRecord) {
           originalValue =
             field === "weight"
@@ -342,7 +321,7 @@ export default function MonthlyDetails() {
       if (currentState.isNew) {
         hasChanges = restoredState.weight !== "" && restoredState.fat !== "";
       } else {
-        const originalRecord = records.find((r) => r.id === currentState.id);
+        const originalRecord = records.find((r) => r.date === currentState.date);
         if (originalRecord) {
           hasChanges =
             restoredState.weight !== originalRecord.weight.toString() ||

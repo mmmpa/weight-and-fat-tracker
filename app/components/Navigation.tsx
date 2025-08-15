@@ -50,6 +50,14 @@ export function Navigation() {
           <Link to="/monthly">{t("common.navigation.monthly")}</Link>
         )}{" "}
         |{" "}
+        {location.pathname === "/export-import" ? (
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            {t("common.navigation.exportImport")}
+          </span>
+        ) : (
+          <Link to="/export-import">{t("common.navigation.exportImport")}</Link>
+        )}{" "}
+        |{" "}
         {location.pathname === currentMonthPath ? (
           <span style={{ color: "black", fontWeight: "bold" }}>
             {t("monthly.currentMonth")} ({currentYear}/{currentMonth})

@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const WeightRecordSchema = z.object({
-  id: z.string(),
   date: z.string().refine((date) => !Number.isNaN(Date.parse(date)), {
     message: "Invalid date format",
   }),

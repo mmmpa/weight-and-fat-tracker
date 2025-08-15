@@ -11,33 +11,28 @@ describe("generateShareUrl", () => {
   });
 
   it("should return null for records with invalid data", () => {
-    const records: WeightRecord[] = [
-      { id: "1", date: "2024-01-01", weight: 0, fat_rate: 15 },
-      { id: "2", date: "2024-01-02", weight: 70, fat_rate: 0 },
-    ];
+    const records: WeightRecord[] = [{ date: "2024-01-15", weight: 0, fat_rate: 18.5 }];
     const result = generateShareUrl(records, origin);
     expect(result).toBeNull();
   });
 
   it("should generate URL for single record", () => {
-    const records: WeightRecord[] = [{ id: "1", date: "2024-01-15", weight: 70.5, fat_rate: 18.5 }];
+    const records: WeightRecord[] = [{ date: "2024-01-15", weight: 70.5, fat_rate: 18.5 }];
     const result = generateShareUrl(records, origin);
     expect(result).toBe("http://localhost:5173/share?20240115-3-071-185");
   });
 
   it("should use 4 digits for weights >= 100kg", () => {
-    const records: WeightRecord[] = [
-      { id: "1", date: "2024-01-15", weight: 105.3, fat_rate: 25.5 },
-    ];
+    const records: WeightRecord[] = [{ date: "2024-01-15", weight: 105.3, fat_rate: 25.5 }];
     const result = generateShareUrl(records, origin);
     expect(result).toBe("http://localhost:5173/share?20240115-4-1053-255");
   });
 
   it("should fill gaps between dates", () => {
     const records: WeightRecord[] = [
-      { id: "1", date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
-      { id: "2", date: "2024-01-03", weight: 70.5, fat_rate: 18.5 },
-      { id: "3", date: "2024-01-05", weight: 71.0, fat_rate: 19.0 },
+      { date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
+      { date: "2024-01-03", weight: 70.5, fat_rate: 18.5 },
+      { date: "2024-01-05", weight: 71.0, fat_rate: 19.0 },
     ];
     const result = generateShareUrl(records, origin);
     // Should include 5 days: Jan 1, 2 (filled), 3, 4 (filled), 5
@@ -46,9 +41,9 @@ describe("generateShareUrl", () => {
 
   it("should sort records by date before processing", () => {
     const records: WeightRecord[] = [
-      { id: "3", date: "2024-01-03", weight: 71.0, fat_rate: 19.0 },
-      { id: "1", date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
-      { id: "2", date: "2024-01-02", weight: 70.5, fat_rate: 18.5 },
+      { date: "2024-01-03", weight: 71.0, fat_rate: 19.0 },
+      { date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
+      { date: "2024-01-02", weight: 70.5, fat_rate: 18.5 },
     ];
     const result = generateShareUrl(records, origin);
     expect(result).toBe("http://localhost:5173/share?20240101-3-070071071-180185190");
@@ -56,8 +51,8 @@ describe("generateShareUrl", () => {
 
   it("should round weight and fat values correctly", () => {
     const records: WeightRecord[] = [
-      { id: "1", date: "2024-01-01", weight: 70.44, fat_rate: 18.44 },
-      { id: "2", date: "2024-01-02", weight: 70.56, fat_rate: 18.56 },
+      { date: "2024-01-01", weight: 70.44, fat_rate: 18.44 },
+      { date: "2024-01-02", weight: 70.56, fat_rate: 18.56 },
     ];
     const result = generateShareUrl(records, origin);
     // 70.44 rounds to 70, 70.56 rounds to 71
@@ -90,7 +85,6 @@ describe("parseShareData", () => {
     const result = parseShareData("20240115-3-071-185");
     expect(result).toHaveLength(1);
     expect(result![0]).toEqual({
-      id: "shared-0",
       date: "2024-01-15",
       weight: 71,
       fat_rate: 18.5,
@@ -101,7 +95,6 @@ describe("parseShareData", () => {
     const result = parseShareData("20240115-4-1053-255");
     expect(result).toHaveLength(1);
     expect(result![0]).toEqual({
-      id: "shared-0",
       date: "2024-01-15",
       weight: 105.3,
       fat_rate: 25.5,
@@ -112,19 +105,16 @@ describe("parseShareData", () => {
     const result = parseShareData("20240101-3-070071072-180185190");
     expect(result).toHaveLength(3);
     expect(result![0]).toEqual({
-      id: "shared-0",
       date: "2024-01-01",
       weight: 70,
       fat_rate: 18.0,
     });
     expect(result![1]).toEqual({
-      id: "shared-1",
       date: "2024-01-02",
       weight: 71,
       fat_rate: 18.5,
     });
     expect(result![2]).toEqual({
-      id: "shared-2",
       date: "2024-01-03",
       weight: 72,
       fat_rate: 19.0,
@@ -162,9 +152,9 @@ describe("generateShareUrl and parseShareData integration", () => {
 
   it("should round-trip data correctly", () => {
     const originalRecords: WeightRecord[] = [
-      { id: "1", date: "2024-01-15", weight: 70.5, fat_rate: 18.5 },
-      { id: "2", date: "2024-01-16", weight: 71.0, fat_rate: 19.0 },
-      { id: "3", date: "2024-01-17", weight: 71.5, fat_rate: 19.5 },
+      { date: "2024-01-15", weight: 70.5, fat_rate: 18.5 },
+      { date: "2024-01-16", weight: 71.0, fat_rate: 19.0 },
+      { date: "2024-01-17", weight: 71.5, fat_rate: 19.5 },
     ];
 
     const url = generateShareUrl(originalRecords, origin);
@@ -185,8 +175,8 @@ describe("generateShareUrl and parseShareData integration", () => {
 
   it("should handle gaps correctly in round-trip", () => {
     const originalRecords: WeightRecord[] = [
-      { id: "1", date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
-      { id: "3", date: "2024-01-05", weight: 71.0, fat_rate: 19.0 },
+      { date: "2024-01-01", weight: 70.0, fat_rate: 18.0 },
+      { date: "2024-01-05", weight: 71.0, fat_rate: 19.0 },
     ];
 
     const url = generateShareUrl(originalRecords, origin);

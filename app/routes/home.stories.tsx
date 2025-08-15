@@ -14,7 +14,6 @@ function MockHome({
   },
 }: {
   recentRecords?: Array<{
-    id: string;
     date: string;
     weight: number;
     fat_rate: number;
@@ -78,7 +77,7 @@ function MockHome({
             </thead>
             <tbody>
               {recentRecords.map((record) => (
-                <tr key={record.id}>
+                <tr key={record.date}>
                   <td>{new Date(record.date).toLocaleDateString()}</td>
                   <td>{record.weight.toFixed(1)}</td>
                   <td>{record.fat_rate.toFixed(1)}</td>
@@ -107,19 +106,16 @@ export const Default: Story = {
   args: {
     recentRecords: [
       {
-        id: "1",
         date: "2024-01-15",
         weight: 70.5,
         fat_rate: 18.5,
       },
       {
-        id: "2",
         date: "2024-01-14",
         weight: 70.8,
         fat_rate: 18.7,
       },
       {
-        id: "3",
         date: "2024-01-13",
         weight: 71.0,
         fat_rate: 18.9,
@@ -152,13 +148,11 @@ export const WithWeightGain: Story = {
   args: {
     recentRecords: [
       {
-        id: "1",
         date: "2024-01-15",
         weight: 72.1,
         fat_rate: 19.2,
       },
       {
-        id: "2",
         date: "2024-01-14",
         weight: 71.8,
         fat_rate: 19.0,
@@ -176,13 +170,7 @@ export const WithWeightGain: Story = {
 
 export const WithManyRecords: Story = {
   args: {
-    recentRecords: [
-      { id: "1", date: "2024-01-15", weight: 70.5, fat_rate: 18.5 },
-      { id: "2", date: "2024-01-14", weight: 70.8, fat_rate: 18.7 },
-      { id: "3", date: "2024-01-13", weight: 71.0, fat_rate: 18.9 },
-      { id: "4", date: "2024-01-12", weight: 71.2, fat_rate: 19.1 },
-      { id: "5", date: "2024-01-11", weight: 71.4, fat_rate: 19.3 },
-    ],
+    recentRecords: [],
     stats: {
       totalRecords: 150,
       latestWeight: 70.5,

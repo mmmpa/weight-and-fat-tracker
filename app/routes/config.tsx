@@ -1,6 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
+import { resetWeightDatabase } from "../features/weights/api";
 import {
   clearDatabaseConfig,
   DatabaseConfigSchema,
@@ -17,6 +18,7 @@ export default function ConfigPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [isResettingDatabase, setIsResettingDatabase] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -67,6 +69,33 @@ export default function ConfigPage() {
     setMessage(t("config.cleared"));
   };
 
+  const handleResetDatabase = async () => {
+    if (
+      !confirm(
+        "Are you sure you want to reset the database? This will delete ALL weight records permanently!"
+      )
+    ) {
+      return;
+    }
+
+    setMessage("");
+    setError("");
+    setIsResettingDatabase(true);
+
+    try {
+      await resetWeightDatabase();
+      setMessage("Database reset successfully. All weight records have been deleted.");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to reset database");
+      }
+    } finally {
+      setIsResettingDatabase(false);
+    }
+  };
+
   return (
     <div>
       <h1>{t("config.title")}</h1>
@@ -109,10 +138,14 @@ export default function ConfigPage() {
         </table>
 
         <div style={{ marginBottom: "10px" }}>
-          <button type="submit" disabled={isTestingConnection}>
+          <button type="submit" disabled={isTestingConnection || isResettingDatabase}>
             {isTestingConnection ? t("config.testing") : t("config.saveButton")}
           </button>{" "}
-          <button type="button" onClick={handleClear} disabled={isTestingConnection}>
+          <button
+            type="button"
+            onClick={handleClear}
+            disabled={isTestingConnection || isResettingDatabase}
+          >
             {t("common.actions.clear")}
           </button>
         </div>
@@ -146,6 +179,30 @@ export default function ConfigPage() {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <hr style={{ margin: "30px 0" }} />
+
+      <div>
+        <h3 style={{ color: "red" }}>⚠️ Danger Zone</h3>
+        <p>
+          <strong>Reset Database:</strong> This will permanently delete ALL weight records from the
+          database. This action cannot be undone!
+        </p>
+        <button
+          type="button"
+          onClick={handleResetDatabase}
+          disabled={isResettingDatabase || isTestingConnection}
+          style={{
+            backgroundColor: "#dc2626",
+            color: "white",
+            padding: "10px 15px",
+            border: "1px solid #b91c1c",
+            cursor: isResettingDatabase ? "not-allowed" : "pointer",
+          }}
+        >
+          {isResettingDatabase ? "Resetting..." : "Reset Database"}
+        </button>
       </div>
     </div>
   );

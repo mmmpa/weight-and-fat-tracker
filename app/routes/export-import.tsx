@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  createWeightRecord,
-  getWeightRecordByDate,
-  getWeightRecords,
-  updateWeightRecord,
-} from "../features/weights/api";
+import { getWeightRecords, saveWeightRecord } from "../features/weights/api";
 import { CreateWeightRecordInputSchema } from "../features/weights/types";
 
 export default function ExportImport() {
@@ -46,8 +41,7 @@ export default function ExportImport() {
         throw new Error("Invalid file format: expected an array of records");
       }
 
-      let imported = 0;
-      let updated = 0;
+      let successful = 0;
       let failed = 0;
 
       for (const record of data) {
@@ -58,24 +52,15 @@ export default function ExportImport() {
             fat_rate: record.fat_rate,
           });
 
-          const existing = await getWeightRecordByDate(validatedInput.date);
-
-          if (existing) {
-            await updateWeightRecord(existing.id, validatedInput);
-            updated++;
-          } else {
-            await createWeightRecord(validatedInput);
-            imported++;
-          }
+          await saveWeightRecord(validatedInput);
+          successful++;
         } catch (error) {
           failed++;
           console.error(`Failed to import record for date ${record.date}:`, error);
         }
       }
 
-      setImportStatus(
-        `Import complete: ${imported} new records, ${updated} updated, ${failed} failed`
-      );
+      setImportStatus(`Import complete: ${successful} records processed, ${failed} failed`);
     } catch (error) {
       setImportStatus(`Import failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
