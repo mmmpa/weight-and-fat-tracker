@@ -409,6 +409,7 @@ export default function MonthlyDetails() {
               <th>Date</th>
               <th>Weight (kg)</th>
               <th>Fat %</th>
+              <th>Lean Mass (kg)</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -420,6 +421,17 @@ export default function MonthlyDetails() {
               const recordDate = new Date(state.date);
               const dayOfWeek = recordDate.toLocaleDateString("en-US", { weekday: "short" });
               const isToday = state.date === new Date().toISOString().split("T")[0];
+
+              // Calculate fat mass and lean mass if both weight and fat values are valid
+              const weight = parseFloat(state.weight);
+              const fatPercentage = parseFloat(state.fat);
+              const hasValidValues =
+                !Number.isNaN(weight) &&
+                !Number.isNaN(fatPercentage) &&
+                weight > 0 &&
+                fatPercentage > 0;
+              const fatMass = hasValidValues ? weight * (fatPercentage / 100) : 0;
+              const leanMass = hasValidValues ? weight - fatMass : 0;
 
               return (
                 <tr key={dateKey}>
@@ -446,6 +458,7 @@ export default function MonthlyDetails() {
                       size={8}
                     />
                   </td>
+                  <td>{hasValidValues ? leanMass.toFixed(1) : "-"}</td>
                   <td>
                     {state.hasChanges && (
                       <button
