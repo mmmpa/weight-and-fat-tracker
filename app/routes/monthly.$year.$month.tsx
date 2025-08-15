@@ -161,58 +161,24 @@ export default function MonthlyDetails() {
     const weight = parseFloat(state.weight);
     const fat = parseFloat(state.fat);
 
-    // Validate and restore original values if invalid
-    if (Number.isNaN(weight) || weight <= 0) {
-      let originalWeight = "";
-      if (!state.isNew) {
-        const originalRecord = records.find((r) => r.date === state.date);
-        if (originalRecord) {
-          originalWeight = originalRecord.weight.toString();
-        }
-      }
+    // Validate both values and rollback if either is invalid
+    if (Number.isNaN(weight) || weight <= 0 || Number.isNaN(fat) || fat <= 0) {
+      const originalRecord = state.isNew ? null : records.find((r) => r.date === state.date);
+      const originalWeight = originalRecord ? originalRecord.weight.toString() : "";
+      const originalFat = originalRecord ? originalRecord.fat_rate.toString() : "";
 
       setRecordStates({
         ...recordStates,
         [dateKey]: {
           ...state,
           weight: originalWeight,
-          hasChanges:
-            originalWeight !== state.fat &&
-            state.fat !==
-              (state.isNew
-                ? ""
-                : records.find((r) => r.date === state.date)?.fat_rate.toString() || ""),
-        },
-      });
-
-      alert(t("validation.invalidWeight"));
-      return;
-    }
-
-    if (Number.isNaN(fat) || fat <= 0) {
-      let originalFat = "";
-      if (!state.isNew) {
-        const originalRecord = records.find((r) => r.date === state.date);
-        if (originalRecord) {
-          originalFat = originalRecord.fat_rate.toString();
-        }
-      }
-
-      setRecordStates({
-        ...recordStates,
-        [dateKey]: {
-          ...state,
           fat: originalFat,
-          hasChanges:
-            state.weight !==
-              (state.isNew
-                ? ""
-                : records.find((r) => r.date === state.date)?.weight.toString() || "") &&
-            originalFat !== state.weight,
+          hasChanges: false,
         },
       });
 
-      alert(t("validation.invalidFat"));
+      const invalidField = Number.isNaN(weight) || weight <= 0 ? "weight" : "fat";
+      alert(t(`validation.invalid${invalidField.charAt(0).toUpperCase() + invalidField.slice(1)}`));
       return;
     }
 
