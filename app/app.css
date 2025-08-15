@@ -35,3 +35,23 @@ button {
 button {
   cursor: pointer;
 }
+
+/* Navigation separator styling */
+.navigation-links .nav-item {
+  padding: 0 10px;
+  border-right: 1px solid black;
+}
+
+.navigation-links .nav-item:first-child {
+  padding-left: 0;
+}
+
+.navigation-links .nav-item:last-child {
+  border-right: none;
+}
+
+/* Active link styling */
+.active-link {
+  color: black;
+  font-weight: bold;
+}

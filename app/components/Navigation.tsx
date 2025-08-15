@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { getCurrentMonthPath } from "../utils/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { NavLink } from "./NavLink";
 
 export function Navigation() {
   const location = useLocation();
@@ -21,52 +22,30 @@ export function Navigation() {
         <LanguageSwitcher />
       </h1>
       <hr />
-      <p>
-        {isHomePage ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>{t("common.navigation.home")}</span>
-        ) : (
-          <Link to="/">{t("common.navigation.home")}</Link>
-        )}{" "}
-        |{" "}
-        {location.pathname === "/graph" ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>{t("common.navigation.graph")}</span>
-        ) : (
-          <Link to="/graph">{t("common.navigation.graph")}</Link>
-        )}{" "}
-        |{" "}
-        {location.pathname === currentMonthPath ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>{t("monthly.currentMonth")}</span>
-        ) : (
-          <Link to={currentMonthPath}>{t("monthly.currentMonth")}</Link>
-        )}{" "}
-        |{" "}
-        {location.pathname === "/monthly" ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>
-            {t("common.navigation.monthly")}
-          </span>
-        ) : (
-          <Link to="/monthly">{t("common.navigation.monthly")}</Link>
-        )}{" "}
-        |{" "}
-        {location.pathname === "/export-import" ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>
-            {t("common.navigation.exportImport")}
-          </span>
-        ) : (
-          <Link to="/export-import">{t("common.navigation.exportImport")}</Link>
-        )}{" "}
-        |{" "}
-        {location.pathname === "/config" ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>
-            {t("common.navigation.config")}
-          </span>
-        ) : (
-          <Link to="/config">{t("common.navigation.config")}</Link>
-        )}{" "}
-        |{" "}
-        <small>
-          build: {import.meta.env.VITE_GIT_COMMIT_HASH} ({import.meta.env.VITE_BUILD_DATE})
-        </small>
+      <p className="navigation-links">
+        <NavLink to="/" isActive={isHomePage}>
+          {t("common.navigation.home")}
+        </NavLink>
+        <NavLink to="/graph" isActive={location.pathname === "/graph"}>
+          {t("common.navigation.graph")}
+        </NavLink>
+        <NavLink to={currentMonthPath} isActive={location.pathname === currentMonthPath}>
+          {t("monthly.currentMonth")}
+        </NavLink>
+        <NavLink to="/monthly" isActive={location.pathname === "/monthly"}>
+          {t("common.navigation.monthly")}
+        </NavLink>
+        <NavLink to="/export-import" isActive={location.pathname === "/export-import"}>
+          {t("common.navigation.exportImport")}
+        </NavLink>
+        <NavLink to="/config" isActive={location.pathname === "/config"}>
+          {t("common.navigation.config")}
+        </NavLink>
+        <span className="nav-item">
+          <small>
+            build: {import.meta.env.VITE_GIT_COMMIT_HASH} ({import.meta.env.VITE_BUILD_DATE})
+          </small>
+        </span>
       </p>
       <hr />
     </div>
