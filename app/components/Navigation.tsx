@@ -10,8 +10,8 @@ export function Navigation() {
 
   // Get current month info for display
   const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const _currentYear = currentDate.getFullYear();
+  const _currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
   const currentMonthPath = getCurrentMonthPath();
 
   return (
@@ -34,6 +34,12 @@ export function Navigation() {
           <Link to="/graph">{t("common.navigation.graph")}</Link>
         )}{" "}
         |{" "}
+        {location.pathname === currentMonthPath ? (
+          <span style={{ color: "black", fontWeight: "bold" }}>{t("monthly.currentMonth")}</span>
+        ) : (
+          <Link to={currentMonthPath}>{t("monthly.currentMonth")}</Link>
+        )}{" "}
+        |{" "}
         {location.pathname === "/monthly" ? (
           <span style={{ color: "black", fontWeight: "bold" }}>
             {t("common.navigation.monthly")}
@@ -50,23 +56,14 @@ export function Navigation() {
           <Link to="/export-import">{t("common.navigation.exportImport")}</Link>
         )}{" "}
         |{" "}
-        {location.pathname === currentMonthPath ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>
-            {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
-          </span>
-        ) : (
-          <Link to={currentMonthPath}>
-            {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
-          </Link>
-        )}{" "}
-        |{" "}
         {location.pathname === "/config" ? (
           <span style={{ color: "black", fontWeight: "bold" }}>
             {t("common.navigation.config")}
           </span>
         ) : (
           <Link to="/config">{t("common.navigation.config")}</Link>
-        )}
+        )}{" "}
+        | <small>build: {import.meta.env.VITE_GIT_COMMIT_HASH}</small>
       </p>
       <hr />
     </div>
