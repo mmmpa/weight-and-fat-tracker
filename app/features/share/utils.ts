@@ -53,7 +53,7 @@ export function generateShareUrl(records: WeightRecord[], origin: string): strin
 
   // Encode weights
   const weightStrings = filledRecords.map((r) => {
-    const weightValue = digitCount === 4 ? Math.round(r.weight * 10) : Math.round(r.weight);
+    const weightValue = Math.round(r.weight * 10);
     return weightValue.toString().padStart(digitCount, "0");
   });
 
@@ -102,8 +102,8 @@ export function parseShareData(queryString: string): WeightRecord[] | null {
     if (chunk.length === digitCount) {
       const value = parseInt(chunk);
       if (!Number.isNaN(value)) {
-        // Convert based on digit count
-        const weight = digitCount === 4 ? value / 10 : value;
+        // Always divide by 10 since we always multiply by 10 during encoding
+        const weight = value / 10;
         weightValues.push(weight);
       }
     }

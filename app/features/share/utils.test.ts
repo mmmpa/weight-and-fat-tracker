@@ -19,7 +19,7 @@ describe("generateShareUrl", () => {
   it("should generate URL for single record", () => {
     const records: WeightRecord[] = [{ date: "2024-01-15", weight: 70.5, fat_rate: 18.5 }];
     const result = generateShareUrl(records, origin);
-    expect(result).toBe("http://localhost:5173/share?20240115-3-071-185");
+    expect(result).toBe("http://localhost:5173/share?20240115-3-705-185");
   });
 
   it("should use 4 digits for weights >= 100kg", () => {
@@ -36,7 +36,7 @@ describe("generateShareUrl", () => {
     ];
     const result = generateShareUrl(records, origin);
     // Should include 5 days: Jan 1, 2 (filled), 3, 4 (filled), 5
-    expect(result).toBe("http://localhost:5173/share?20240101-3-070070071071071-180180185185190");
+    expect(result).toBe("http://localhost:5173/share?20240101-3-700700705705710-180180185185190");
   });
 
   it("should sort records by date before processing", () => {
@@ -46,7 +46,7 @@ describe("generateShareUrl", () => {
       { date: "2024-01-02", weight: 70.5, fat_rate: 18.5 },
     ];
     const result = generateShareUrl(records, origin);
-    expect(result).toBe("http://localhost:5173/share?20240101-3-070071071-180185190");
+    expect(result).toBe("http://localhost:5173/share?20240101-3-700705710-180185190");
   });
 
   it("should round weight and fat values correctly", () => {
@@ -55,9 +55,9 @@ describe("generateShareUrl", () => {
       { date: "2024-01-02", weight: 70.56, fat_rate: 18.56 },
     ];
     const result = generateShareUrl(records, origin);
-    // 70.44 rounds to 70, 70.56 rounds to 71
+    // 70.44 * 10 = 704.4 rounds to 704, 70.56 * 10 = 705.6 rounds to 706
     // 18.44 * 10 = 184.4 rounds to 184, 18.56 * 10 = 185.6 rounds to 186
-    expect(result).toBe("http://localhost:5173/share?20240101-3-070071-184186");
+    expect(result).toBe("http://localhost:5173/share?20240101-3-704706-184186");
   });
 });
 
@@ -82,11 +82,11 @@ describe("parseShareData", () => {
   });
 
   it("should parse single record with 3-digit weight", () => {
-    const result = parseShareData("20240115-3-071-185");
+    const result = parseShareData("20240115-3-705-185");
     expect(result).toHaveLength(1);
     expect(result![0]).toEqual({
       date: "2024-01-15",
-      weight: 71,
+      weight: 70.5,
       fat_rate: 18.5,
     });
   });
@@ -102,44 +102,44 @@ describe("parseShareData", () => {
   });
 
   it("should parse multiple records", () => {
-    const result = parseShareData("20240101-3-070071072-180185190");
+    const result = parseShareData("20240101-3-700710720-180185190");
     expect(result).toHaveLength(3);
     expect(result![0]).toEqual({
       date: "2024-01-01",
-      weight: 70,
+      weight: 70.0,
       fat_rate: 18.0,
     });
     expect(result![1]).toEqual({
       date: "2024-01-02",
-      weight: 71,
+      weight: 71.0,
       fat_rate: 18.5,
     });
     expect(result![2]).toEqual({
       date: "2024-01-03",
-      weight: 72,
+      weight: 72.0,
       fat_rate: 19.0,
     });
   });
 
   it("should match shorter array length", () => {
     // 3 weights but only 2 fat rates
-    const result = parseShareData("20240101-3-070071072-180185");
+    const result = parseShareData("20240101-3-700710720-180185");
     expect(result).toHaveLength(2);
 
     // 2 weights but 3 fat rates
-    const result2 = parseShareData("20240101-3-070071-180185190");
+    const result2 = parseShareData("20240101-3-700710-180185190");
     expect(result2).toHaveLength(2);
   });
 
   it("should handle dates across months", () => {
-    const result = parseShareData("20240131-3-070071-180185");
+    const result = parseShareData("20240131-3-700710-180185");
     expect(result).toHaveLength(2);
     expect(result![0].date).toBe("2024-01-31");
     expect(result![1].date).toBe("2024-02-01");
   });
 
   it("should handle leap year dates", () => {
-    const result = parseShareData("20240228-3-070071072-180185190");
+    const result = parseShareData("20240228-3-700710720-180185190");
     expect(result).toHaveLength(3);
     expect(result![0].date).toBe("2024-02-28");
     expect(result![1].date).toBe("2024-02-29"); // 2024 is a leap year
@@ -165,11 +165,11 @@ describe("generateShareUrl and parseShareData integration", () => {
     const parsedRecords = parseShareData(queryString);
 
     expect(parsedRecords).toHaveLength(3);
-    expect(parsedRecords![0].weight).toBe(71); // 70.5 rounds to 71
+    expect(parsedRecords![0].weight).toBe(70.5); // 70.5 * 10 = 705, 705 / 10 = 70.5
     expect(parsedRecords![0].fat_rate).toBe(18.5);
-    expect(parsedRecords![1].weight).toBe(71);
+    expect(parsedRecords![1].weight).toBe(71.0);
     expect(parsedRecords![1].fat_rate).toBe(19.0);
-    expect(parsedRecords![2].weight).toBe(72); // 71.5 rounds to 72
+    expect(parsedRecords![2].weight).toBe(71.5); // 71.5 * 10 = 715, 715 / 10 = 71.5
     expect(parsedRecords![2].fat_rate).toBe(19.5);
   });
 
