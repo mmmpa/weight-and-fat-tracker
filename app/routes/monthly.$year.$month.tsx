@@ -489,9 +489,7 @@ export default function MonthlyDetails() {
                       >
                         {saveLoading === dateKey
                           ? t("common.actions.saving")
-                          : state.isNew
-                            ? t("common.actions.create")
-                            : t("common.actions.save")}
+                          : t("common.actions.save")}
                       </button>
                     )}{" "}
                     {!state.isNew && (
