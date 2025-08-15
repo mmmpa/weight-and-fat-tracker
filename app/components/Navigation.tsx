@@ -63,7 +63,10 @@ export function Navigation() {
         ) : (
           <Link to="/config">{t("common.navigation.config")}</Link>
         )}{" "}
-        | <small>build: {import.meta.env.VITE_GIT_COMMIT_HASH}</small>
+        |{" "}
+        <small>
+          build: {import.meta.env.VITE_GIT_COMMIT_HASH} ({import.meta.env.VITE_BUILD_DATE})
+        </small>
       </p>
       <hr />
     </div>
