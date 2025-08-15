@@ -70,11 +70,7 @@ export default function ConfigPage() {
   };
 
   const handleResetDatabase = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to reset the database? This will delete ALL weight records permanently!"
-      )
-    ) {
+    if (!confirm(t("config.dangerZone.resetConfirm"))) {
       return;
     }
 
@@ -84,12 +80,12 @@ export default function ConfigPage() {
 
     try {
       await resetWeightDatabase();
-      setMessage("Database reset successfully. All weight records have been deleted.");
+      setMessage(t("config.dangerZone.resetSuccess"));
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("Failed to reset database");
+        setError(t("config.dangerZone.resetFailed"));
       }
     } finally {
       setIsResettingDatabase(false);
@@ -184,10 +180,10 @@ export default function ConfigPage() {
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3 style={{ color: "red" }}>⚠️ Danger Zone</h3>
+        <h3 style={{ color: "red" }}>⚠️ {t("config.dangerZone.title")}</h3>
         <p>
-          <strong>Reset Database:</strong> This will permanently delete ALL weight records from the
-          database. This action cannot be undone!
+          <strong>{t("config.dangerZone.resetDatabase")}:</strong>{" "}
+          {t("config.dangerZone.resetDescription")}
         </p>
         <button
           type="button"
@@ -201,7 +197,9 @@ export default function ConfigPage() {
             cursor: isResettingDatabase ? "not-allowed" : "pointer",
           }}
         >
-          {isResettingDatabase ? "Resetting..." : "Reset Database"}
+          {isResettingDatabase
+            ? t("config.dangerZone.resetting")
+            : t("config.dangerZone.resetButton")}
         </button>
       </div>
     </div>

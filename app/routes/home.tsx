@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 export function meta() {
   return [
-    { title: "Weight & Fat Tracker" },
+    { title: "1kg" },
     { name: "description", content: "Track your weight and body fat percentage" },
   ];
 }

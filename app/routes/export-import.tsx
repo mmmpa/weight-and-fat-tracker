@@ -16,7 +16,9 @@ export default function ExportImport() {
       const exportData = await exportWeightRecords();
       downloadExportFile(exportData);
     } catch (error) {
-      alert(`Export failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      alert(
+        `${t("errors.exportFailed")} ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   };
 
@@ -25,14 +27,22 @@ export default function ExportImport() {
     if (!file) return;
 
     setIsProcessing(true);
-    setImportStatus("Processing...");
+    setImportStatus(t("common.status.processing"));
 
     try {
       const text = await file.text();
       const result = await importWeightRecords(text);
-      setImportStatus(result.message);
+      setImportStatus(
+        t("exportImport.import.complete", {
+          new: result.successful,
+          updated: 0, // The API doesn't distinguish between new and updated
+          failed: result.failed,
+        })
+      );
     } catch (error) {
-      setImportStatus(`Import failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      setImportStatus(
+        `${t("errors.importFailed")} ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     } finally {
       setIsProcessing(false);
       if (event.target) {
@@ -43,10 +53,10 @@ export default function ExportImport() {
 
   return (
     <div>
-      <h1>Export/Import Weight Records</h1>
+      <h1>{t("exportImport.title")}</h1>
 
-      <h2>Export Data</h2>
-      <p>Download all your weight records as a JSON file.</p>
+      <h2>{t("exportImport.export.title")}</h2>
+      <p>{t("exportImport.export.description")}</p>
       <button type="button" onClick={handleExport}>
         {t("common.actions.export")}
       </button>
@@ -54,25 +64,22 @@ export default function ExportImport() {
       <br />
       <br />
 
-      <h2>Import Data</h2>
-      <p>
-        Import weight records from a JSON file. Existing records will be updated, new records will
-        be added.
-      </p>
+      <h2>{t("exportImport.import.title")}</h2>
+      <p>{t("exportImport.import.description")}</p>
       <input type="file" accept=".json" onChange={handleImport} disabled={isProcessing} />
 
       {importStatus && (
         <div>
           <br />
-          <strong>Status:</strong> {importStatus}
+          <strong>{t("common.status.status")}</strong> {importStatus}
         </div>
       )}
 
       <br />
       <br />
 
-      <h3>File Format</h3>
-      <p>The JSON file should contain a version field and records array:</p>
+      <h3>{t("exportImport.fileFormat.title")}</h3>
+      <p>{t("exportImport.fileFormat.description")}</p>
       <pre style={{ border: "1px solid black", padding: "10px", backgroundColor: "#f5f5f5" }}>
         {`{
   "version": 1,
@@ -91,7 +98,7 @@ export default function ExportImport() {
 }`}
       </pre>
       <p>
-        <em>Note: The old format (plain array) is still supported for import.</em>
+        <em>{t("exportImport.fileFormat.note")}</em>
       </p>
 
       <br />

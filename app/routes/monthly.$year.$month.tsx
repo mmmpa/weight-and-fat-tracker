@@ -303,7 +303,7 @@ export default function MonthlyDetails() {
         },
       });
 
-      alert(`Invalid ${field} value. Please enter a number greater than 0.`);
+      alert(t(`monthly.alerts.invalid${field.charAt(0).toUpperCase() + field.slice(1)}`));
     }
   }
 
@@ -325,20 +325,26 @@ export default function MonthlyDetails() {
   return (
     <div>
       <h2>
-        {yearNum}/{monthNum.toString().padStart(2, "0")} Records
+        {t("monthly.detailTitle", { year: yearNum, month: monthNum.toString().padStart(2, "0") })}
       </h2>
 
       <p>
-        <Link to="/monthly">[Back to Monthly]</Link>
+        <Link to="/monthly">{t("common.actions.backToMonthly")}</Link>
       </p>
 
       <p>
         <Link to={`/monthly/${prevYear}/${prevMonth}`}>
-          ← {prevYear}/{prevMonth.toString().padStart(2, "0")}
+          {t("monthly.navigation.previous", {
+            year: prevYear,
+            month: prevMonth.toString().padStart(2, "0"),
+          })}
         </Link>{" "}
         |
         <Link to={`/monthly/${nextYear}/${nextMonth}`}>
-          {nextYear}/{nextMonth.toString().padStart(2, "0")} →
+          {t("monthly.navigation.next", {
+            year: nextYear,
+            month: nextMonth.toString().padStart(2, "0"),
+          })}
         </Link>
       </p>
 
@@ -390,14 +396,14 @@ export default function MonthlyDetails() {
         <div>
           <WeightGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} Trends`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} ${t("monthly.graphs.trends")}`}
           />
 
           <br />
 
           <WeightAbsoluteGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} Weight & Fat Weight`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} ${t("monthly.graphs.weightFat")}`}
           />
         </div>
       )}
@@ -406,11 +412,11 @@ export default function MonthlyDetails() {
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Weight (kg)</th>
-              <th>Fat %</th>
-              <th>Lean Mass (kg)</th>
-              <th>Actions</th>
+              <th>{t("common.table.date")}</th>
+              <th>{t("common.table.weight")}</th>
+              <th>{t("common.table.fatPercent")}</th>
+              <th>{t("monthly.table.leanMass")}</th>
+              <th>{t("common.table.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -436,7 +442,8 @@ export default function MonthlyDetails() {
               return (
                 <tr key={dateKey}>
                   <td>
-                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek}){isToday && " (TODAY)"}
+                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek})
+                    {isToday && ` ${t("common.dateLabels.today")}`}
                   </td>
                   <td>
                     <input
@@ -444,7 +451,7 @@ export default function MonthlyDetails() {
                       value={state.weight}
                       onChange={(e) => handleInputChange(dateKey, "weight", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "weight", e.target.value)}
-                      placeholder={state.isNew ? "Weight" : ""}
+                      placeholder={state.isNew ? t("monthly.placeholders.weight") : ""}
                       size={8}
                     />
                   </td>
@@ -454,7 +461,7 @@ export default function MonthlyDetails() {
                       value={state.fat}
                       onChange={(e) => handleInputChange(dateKey, "fat", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "fat", e.target.value)}
-                      placeholder={state.isNew ? "Fat %" : ""}
+                      placeholder={state.isNew ? t("monthly.placeholders.fat") : ""}
                       size={8}
                     />
                   </td>

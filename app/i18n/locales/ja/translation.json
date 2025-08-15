@@ -1,9 +1,8 @@
 {
   "common": {
-    "appTitle": "Weight & Fat Tracker",
+    "appTitle": "1kg",
     "navigation": {
       "home": "ホーム",
-      "dashboard": "ダッシュボード",
       "graph": "グラフ",
       "monthly": "月別",
       "config": "設定",
@@ -53,7 +52,7 @@
     }
   },
   "home": {
-    "title": "体重・体脂肪率トラッカー",
+    "title": "1kg",
     "welcome": {
       "title": "ようこそ",
       "description": "このシンプルなアプリケーションで体重と体脂肪率を時系列で記録・管理できます。"
@@ -85,8 +84,6 @@
     },
     "navigation": {
       "title": "ナビゲーション",
-      "dashboard": "ダッシュボード",
-      "dashboardDesc": "概要と最近の記録を表示",
       "monthly": "月別",
       "monthlyDesc": "月別記録の閲覧・編集",
       "graph": "グラフ",
@@ -102,23 +99,6 @@
       "step2": "2. 月別表示で日々の測定値の記録を開始",
       "step3": "3. グラフ視覚化で進捗を追跡"
     }
-  },
-  "dashboard": {
-    "title": "ダッシュボード",
-    "quickLinks": {
-      "title": "クイックリンク",
-      "monthly": "月別記録",
-      "graph": "グラフ表示",
-      "exportImport": "エクスポート/インポート",
-      "config": "データベース設定"
-    },
-    "summary": {
-      "title": "概要",
-      "totalRecords": "総記録数:",
-      "latestWeight": "最新体重:",
-      "latestFat": "最新体脂肪率:"
-    },
-    "recentRecords": "最近の記録"
   },
   "monthly": {
     "title": "月別記録",
@@ -141,6 +121,21 @@
     "graphs": {
       "trends": "推移",
       "weightFat": "体重・体脂肪量"
+    },
+    "navigation": {
+      "previous": "← {{year}}/{{month}}",
+      "next": "{{year}}/{{month}} →"
+    },
+    "table": {
+      "leanMass": "除脂肪体重 (kg)"
+    },
+    "placeholders": {
+      "weight": "体重",
+      "fat": "体脂肪率 %"
+    },
+    "alerts": {
+      "invalidWeight": "無効な体重値です。0より大きい数値を入力してください。",
+      "invalidFat": "無効な体脂肪率値です。0より大きい数値を入力してください。"
     }
   },
   "graph": {
@@ -165,7 +160,8 @@
     },
     "fileFormat": {
       "title": "ファイル形式",
-      "description": "JSONファイルには体重記録の配列を含める必要があります:"
+      "description": "JSONファイルにはバージョンフィールドと記録の配列を含める必要があります:",
+      "note": "注意: 旧形式（単純な配列）もインポート時にサポートされています。"
     }
   },
   "config": {
@@ -180,7 +176,17 @@
     "saveButton": "設定を保存しテーブルを初期化",
     "testing": "接続テスト中・テーブル作成中...",
     "success": "データベース設定が保存され、テーブルが正常に初期化されました！",
-    "cleared": "設定がクリアされました。"
+    "cleared": "設定がクリアされました。",
+    "dangerZone": {
+      "title": "危険ゾーン",
+      "resetDatabase": "データベースリセット",
+      "resetDescription": "データベースから全ての体重記録を完全に削除します。この操作は元に戻せません！",
+      "resetButton": "データベースをリセット",
+      "resetting": "リセット中...",
+      "resetSuccess": "データベースが正常にリセットされました。全ての体重記録が削除されました。",
+      "resetConfirm": "データベースをリセットしてもよろしいですか？全ての体重記録が完全に削除されます！",
+      "resetFailed": "データベースのリセットに失敗しました"
+    }
   },
   "share": {
     "title": "共有された体重データ",

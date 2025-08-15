@@ -28,14 +28,6 @@ export function Navigation() {
           <Link to="/">{t("common.navigation.home")}</Link>
         )}{" "}
         |{" "}
-        {location.pathname === "/dashboard" ? (
-          <span style={{ color: "black", fontWeight: "bold" }}>
-            {t("common.navigation.dashboard")}
-          </span>
-        ) : (
-          <Link to="/dashboard">{t("common.navigation.dashboard")}</Link>
-        )}{" "}
-        |{" "}
         {location.pathname === "/graph" ? (
           <span style={{ color: "black", fontWeight: "bold" }}>{t("common.navigation.graph")}</span>
         ) : (

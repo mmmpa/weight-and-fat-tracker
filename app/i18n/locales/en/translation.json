@@ -1,9 +1,8 @@
 {
   "common": {
-    "appTitle": "Weight & Fat Tracker",
+    "appTitle": "1kg",
     "navigation": {
       "home": "Home",
-      "dashboard": "Dashboard",
       "graph": "Graph",
       "monthly": "Monthly",
       "config": "Config",
@@ -53,7 +52,7 @@
     }
   },
   "home": {
-    "title": "Weight & Fat Tracker",
+    "title": "1kg",
     "welcome": {
       "title": "Welcome",
       "description": "Track your weight and body fat percentage over time with this simple application."
@@ -85,8 +84,6 @@
     },
     "navigation": {
       "title": "Navigation",
-      "dashboard": "Dashboard",
-      "dashboardDesc": "View summary and recent records",
       "monthly": "Monthly",
       "monthlyDesc": "Browse and edit records by month",
       "graph": "Graph",
@@ -102,23 +99,6 @@
       "step2": "2. Start recording your daily measurements in the Monthly view",
       "step3": "3. Track your progress using the Graph visualization"
     }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "quickLinks": {
-      "title": "Quick Links",
-      "monthly": "Monthly Records",
-      "graph": "View Graphs",
-      "exportImport": "Export/Import Data",
-      "config": "Database Configuration"
-    },
-    "summary": {
-      "title": "Summary",
-      "totalRecords": "Total Records:",
-      "latestWeight": "Latest Weight:",
-      "latestFat": "Latest Fat %:"
-    },
-    "recentRecords": "Recent Records"
   },
   "monthly": {
     "title": "Monthly Records",
@@ -141,6 +121,21 @@
     "graphs": {
       "trends": "Trends",
       "weightFat": "Weight & Fat Weight"
+    },
+    "navigation": {
+      "previous": "← {{year}}/{{month}}",
+      "next": "{{year}}/{{month}} →"
+    },
+    "table": {
+      "leanMass": "Lean Mass (kg)"
+    },
+    "placeholders": {
+      "weight": "Weight",
+      "fat": "Fat %"
+    },
+    "alerts": {
+      "invalidWeight": "Invalid weight value. Please enter a number greater than 0.",
+      "invalidFat": "Invalid fat value. Please enter a number greater than 0."
     }
   },
   "graph": {
@@ -165,7 +160,8 @@
     },
     "fileFormat": {
       "title": "File Format",
-      "description": "The JSON file should contain an array of weight records:"
+      "description": "The JSON file should contain a version field and records array:",
+      "note": "Note: The old format (plain array) is still supported for import."
     }
   },
   "config": {
@@ -180,7 +176,17 @@
     "saveButton": "Save Configuration & Initialize Tables",
     "testing": "Testing Connection & Creating Tables...",
     "success": "Database configuration saved and tables initialized successfully!",
-    "cleared": "Configuration cleared."
+    "cleared": "Configuration cleared.",
+    "dangerZone": {
+      "title": "Danger Zone",
+      "resetDatabase": "Reset Database",
+      "resetDescription": "This will permanently delete ALL weight records from the database. This action cannot be undone!",
+      "resetButton": "Reset Database",
+      "resetting": "Resetting...",
+      "resetSuccess": "Database reset successfully. All weight records have been deleted.",
+      "resetConfirm": "Are you sure you want to reset the database? This will delete ALL weight records permanently!",
+      "resetFailed": "Failed to reset database"
+    }
   },
   "share": {
     "title": "Shared Weight Data",
