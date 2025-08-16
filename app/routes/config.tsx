@@ -1,5 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { resetWeightDatabase } from "../features/weights/api";
 import {
   clearDatabaseConfig,

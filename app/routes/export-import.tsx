@@ -48,7 +48,7 @@ export default function ExportImport() {
       </button>
       <h2>読込</h2>
       <input type="file" accept=".json" onChange={handleImport} disabled={isProcessing} />
-  {importStatus && (
+      {importStatus && (
         <div>
           <br />
           <strong>状態:</strong> {importStatus}

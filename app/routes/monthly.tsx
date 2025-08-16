@@ -4,10 +4,7 @@ import { DatabaseNotConfiguredError } from "../utils/errors";
 import { redirectToCurrentMonth } from "../utils/navigation";
 
 export function meta() {
-  return [
-    { title: "Monthly Records" },
-    { name: "description", content: "Browse weight records by month" },
-  ];
+  return [{ title: "月別 - 1kg.app" }, { name: "description", content: "月別記録" }];
 }
 
 export async function clientLoader() {

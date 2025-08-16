@@ -1,8 +1,5 @@
 export function meta() {
-  return [
-    { title: "1kg" },
-    { name: "description", content: "Track your weight and body fat percentage" },
-  ];
+  return [{ title: "1kg.app" }, { name: "description", content: "体重と体脂肪率を記録" }];
 }
 
 export default function Home() {

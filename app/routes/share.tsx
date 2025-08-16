@@ -5,8 +5,8 @@ import { parseShareData } from "../features/share/utils";
 
 export function meta() {
   return [
-    { title: "Shared Weight Data" },
-    { name: "description", content: "View shared weight and fat percentage data" },
+    { title: "共有データ - 1kg.app" },
+    { name: "description", content: "共有された体重データ" },
   ];
 }
 

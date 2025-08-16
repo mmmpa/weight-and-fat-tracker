@@ -14,7 +14,7 @@ export function Navigation() {
 
   return (
     <div>
-      <h1>1kg</h1>
+      <h1>1kg.app</h1>
       <hr />
       <p className="navigation-links">
         <NavLink to="/" isActive={isHomePage}>

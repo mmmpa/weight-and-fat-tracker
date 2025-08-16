@@ -22,10 +22,7 @@ interface RecordState {
 }
 
 export function meta() {
-  return [
-    { title: "Monthly Records" },
-    { name: "description", content: "View weight records for specific month" },
-  ];
+  return [{ title: "月別記録 - 1kg.app" }, { name: "description", content: "月別の記録詳細" }];
 }
 
 function generateAllDatesInMonth(year: number, month: number): string[] {
