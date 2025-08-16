@@ -27,7 +27,7 @@ export function Navigation() {
           今月
         </NavLink>
         <NavLink to="/monthly" isActive={location.pathname === "/monthly"}>
-          月別
+          月
         </NavLink>
         <NavLink to="/export-import" isActive={location.pathname === "/export-import"}>
           書出/読込

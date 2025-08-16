@@ -92,13 +92,14 @@ export default function ConfigPage() {
 
   return (
     <div>
-      <h1>DB設定</h1>
+      <h1>設定</h1>
+      <p>localStorageに保存する。</p>
       <form onSubmit={handleSubmit}>
         <table border={1} style={{ borderCollapse: "collapse", marginBottom: "20px" }}>
           <tbody>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="url">DB URL:</label>
+                <label htmlFor="url">Turso URL</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -113,7 +114,7 @@ export default function ConfigPage() {
             </tr>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="authToken">トークン:</label>
+                <label htmlFor="authToken">Turso Token</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -142,20 +143,6 @@ export default function ConfigPage() {
       </form>
       {message && <div style={{ color: "green", marginBottom: "10px" }}>{message}</div>}
       {error && <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>}
-      <table border={1} style={{ borderCollapse: "collapse" }}>
-        <tbody>
-          <tr>
-            <td style={{ padding: "5px" }}>DB URL:</td>
-            <td style={{ padding: "5px", fontFamily: "monospace" }}>{url || "(未設定)"}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: "5px" }}>トークン:</td>
-            <td style={{ padding: "5px", fontFamily: "monospace" }}>
-              {authToken ? "******" : "なし"}
-            </td>
-          </tr>
-        </tbody>
-      </table>
       <div>
         <button
           type="button"

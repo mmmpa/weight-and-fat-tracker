@@ -5,21 +5,16 @@ export function meta() {
 export default function Home() {
   return (
     <div>
-      <h1>1kg</h1>
-      <p>体重と体脂肪率を記録</p>
-      <h2>機能</h2>
-      <ul>
-        <li>日次記録</li>
-        <li>月別表示</li>
-        <li>グラフ</li>
-        <li>エクスポート/インポート</li>
-      </ul>
       <h2>使い方</h2>
       <ol>
-        <li>設定でDB接続</li>
-        <li>月別で記録</li>
-        <li>グラフで確認</li>
+        <li>設定でTurso接続</li>
+        <li>体重と体脂肪を記録</li>
       </ol>
+      <h2>特徴</h2>
+      <ul>
+        <li>バックエンドサーバー無し</li>
+        <li>Tursoへのリクエストのみ</li>
+      </ul>
     </div>
   );
 }
