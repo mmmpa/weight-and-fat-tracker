@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
+import { generateShareUrl } from "../features/share/utils";
 import { getWeightRecords, getWeightRecordsByDateRange } from "../features/weights/api";
 import type { WeightRecord } from "../features/weights/types";
 import { DatabaseNotConfiguredError } from "../utils/errors";
@@ -134,6 +135,33 @@ export default function Graph() {
           </div>
         )}
       </div>
+      {records.length > 0 && (
+        <div style={{ marginBottom: "20px" }}>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const shareUrl = generateShareUrl(records, window.location.origin);
+                if (!shareUrl) {
+                  alert("共有URLを生成できませんでした。");
+                  return;
+                }
+                await navigator.clipboard.writeText(shareUrl);
+                alert("共有URLがクリップボードにコピーされました！");
+              } catch (_err) {
+                const url = generateShareUrl(records, window.location.origin);
+                if (!url) {
+                  alert("共有URLを生成できませんでした。");
+                  return;
+                }
+                alert(`URLのコピーに失敗しました。手動でコピーしてください: ${url}`);
+              }
+            }}
+          >
+            URLコピー
+          </button>
+        </div>
+      )}
       <WeightGraph
         records={records}
         title={useRangeFilter ? `${startDate}～${endDate}` : "全記録"}
