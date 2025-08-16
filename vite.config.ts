@@ -4,7 +4,17 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const commitHash = execSync("git rev-parse --short HEAD").toString().trim();
-const buildDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+const buildDate = `${new Date()
+  .toLocaleString("sv-SE", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  })
+  .replace(" ", "T")}+09:00`; // Full ISO format with JST timezone
 
 export default defineConfig({
   plugins: [reactRouter(), tsconfigPaths()],
