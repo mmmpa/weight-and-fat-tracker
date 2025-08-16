@@ -84,7 +84,7 @@ export default function Graph() {
     await handleFilterChange();
   };
 
-  if (loading) return <div>読み込み中...</div>;
+  if (loading) return <div>読込中</div>;
   if (error) return <div>エラー: {error}</div>;
 
   // Get current month for redirect link
@@ -94,7 +94,7 @@ export default function Graph() {
 
   return (
     <div>
-      <h2>体重・体脂肪率グラフ</h2>
+      <h2>グラフ</h2>
 
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth}`}>
@@ -110,13 +110,13 @@ export default function Graph() {
             checked={useRangeFilter}
             onChange={(e) => handleRangeFilterToggle(e.target.checked)}
           />
-          期間を指定
+          期間指定
         </label>
 
         {useRangeFilter && (
           <div style={{ marginTop: "10px" }}>
             <label>
-              開始日:
+              開始:
               <input
                 type="date"
                 value={startDate}
@@ -126,7 +126,7 @@ export default function Graph() {
             </label>
             <br />
             <label>
-              終了日:
+              終了:
               <input
                 type="date"
                 value={endDate}
@@ -140,18 +140,14 @@ export default function Graph() {
 
       <WeightGraph
         records={records}
-        title={useRangeFilter ? `${startDate}から${endDate}までの記録` : "全ての記録"}
+        title={useRangeFilter ? `${startDate}～${endDate}` : "全記録"}
       />
 
       <br />
 
       <WeightAbsoluteGraph
         records={records}
-        title={
-          useRangeFilter
-            ? `${startDate}から${endDate}までの体重・体脂肪量`
-            : "体重・体脂肪量 - 全記録"
-        }
+        title={useRangeFilter ? `${startDate}～${endDate} 体重・脂肪量` : "体重・脂肪量"}
       />
     </div>
   );

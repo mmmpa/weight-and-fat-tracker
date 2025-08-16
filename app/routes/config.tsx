@@ -44,7 +44,7 @@ export default function ConfigPage() {
       await testDatabaseConnection(config.url, config.authToken);
 
       await saveDatabaseConfig(config);
-      setMessage("データベース設定が保存され、テーブルが正常に初期化されました！");
+      setMessage("設定保存完了");
 
       setTimeout(() => {
         navigate("/");
@@ -53,7 +53,7 @@ export default function ConfigPage() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("Invalid configuration or connection failed");
+        setError("設定エラー");
       }
     } finally {
       setIsTestingConnection(false);
@@ -64,13 +64,11 @@ export default function ConfigPage() {
     await clearDatabaseConfig();
     setUrl("");
     setAuthToken("");
-    setMessage("設定がクリアされました。");
+    setMessage("クリア済み");
   };
 
   const handleResetDatabase = async () => {
-    if (
-      !confirm("データベースをリセットしてもよろしいですか？全ての体重記録が完全に削除されます！")
-    ) {
+    if (!confirm("全データ削除します。よろしいですか？")) {
       return;
     }
 
@@ -80,12 +78,12 @@ export default function ConfigPage() {
 
     try {
       await resetWeightDatabase();
-      setMessage("データベースが正常にリセットされました。全ての体重記録が削除されました。");
+      setMessage("リセット完了");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("データベースのリセットに失敗しました");
+        setError("リセット失敗");
       }
     } finally {
       setIsResettingDatabase(false);
@@ -94,18 +92,14 @@ export default function ConfigPage() {
 
   return (
     <div>
-      <h1>データベース設定</h1>
-
-      <p>
-        Tursoデータベース接続を設定します。設定を保存すると、システムが自動的に接続をテストし、必要なテーブルを作成します。
-      </p>
+      <h1>DB設定</h1>
 
       <form onSubmit={handleSubmit}>
         <table border={1} style={{ borderCollapse: "collapse", marginBottom: "20px" }}>
           <tbody>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="url">データベースURL:</label>
+                <label htmlFor="url">DB URL:</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -120,7 +114,7 @@ export default function ConfigPage() {
             </tr>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="authToken">認証トークン (オプション):</label>
+                <label htmlFor="authToken">トークン:</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -137,16 +131,14 @@ export default function ConfigPage() {
 
         <div style={{ marginBottom: "10px" }}>
           <button type="submit" disabled={isTestingConnection || isResettingDatabase}>
-            {isTestingConnection
-              ? "接続テスト中・テーブル作成中..."
-              : "設定を保存しテーブルを初期化"}
+            {isTestingConnection ? "処理中..." : "保存"}
           </button>{" "}
           <button
             type="button"
             onClick={handleClear}
             disabled={isTestingConnection || isResettingDatabase}
           >
-            設定をクリア
+            クリア
           </button>
         </div>
       </form>
@@ -156,23 +148,23 @@ export default function ConfigPage() {
       {error && <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>}
 
       <div style={{ marginTop: "20px" }}>
-        <Link to="/">← ホームに戻る</Link>
+        <Link to="/">← 戻る</Link>
       </div>
 
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3>現在の設定</h3>
+        <h3>現在</h3>
         <table border={1} style={{ borderCollapse: "collapse" }}>
           <tbody>
             <tr>
-              <td style={{ padding: "5px" }}>データベースURL:</td>
+              <td style={{ padding: "5px" }}>DB URL:</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>{url || "(未設定)"}</td>
             </tr>
             <tr>
-              <td style={{ padding: "5px" }}>認証トークン (オプション):</td>
+              <td style={{ padding: "5px" }}>トークン:</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {authToken ? "****** (設定済み)" : "(未設定)"}
+                {authToken ? "******" : "なし"}
               </td>
             </tr>
           </tbody>
@@ -182,11 +174,8 @@ export default function ConfigPage() {
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3 style={{ color: "red" }}>⚠️ 危険ゾーン</h3>
-        <p>
-          <strong>データベースリセット:</strong>{" "}
-          データベースから全ての体重記録を完全に削除します。この操作は元に戻せません！
-        </p>
+        <h3 style={{ color: "red" }}>⚠️ 危険</h3>
+        <p>全データ削除（元に戻せません）</p>
         <button
           type="button"
           onClick={handleResetDatabase}
@@ -199,7 +188,7 @@ export default function ConfigPage() {
             cursor: isResettingDatabase ? "not-allowed" : "pointer",
           }}
         >
-          {isResettingDatabase ? "リセット中..." : "データベースをリセット"}
+          {isResettingDatabase ? "処理中..." : "全削除"}
         </button>
       </div>
     </div>

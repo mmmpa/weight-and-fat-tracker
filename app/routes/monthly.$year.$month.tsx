@@ -119,7 +119,7 @@ export default function MonthlyDetails() {
     const state = recordStates[dateKey];
     if (!state || state.isNew) return;
 
-    if (!confirm("この記録を削除してもよろしいですか？")) return;
+    if (!confirm("記録を削除？")) return;
 
     try {
       setDeleteLoading(dateKey);
@@ -143,7 +143,7 @@ export default function MonthlyDetails() {
         const newStats = await getMonthlyStats(yearNum, monthNum);
         setStats(newStats);
       } else {
-        alert("記録の削除に失敗しました");
+        alert("削除失敗");
       }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete record");
@@ -176,10 +176,7 @@ export default function MonthlyDetails() {
       });
 
       const invalidField = Number.isNaN(weight) || weight <= 0 ? "weight" : "fat";
-      const invalidFieldMessage =
-        invalidField === "weight"
-          ? "無効な体重値です。0より大きい数値を入力してください。"
-          : "無効な体脂肪率値です。0より大きい数値を入力してください。";
+      const invalidFieldMessage = invalidField === "weight" ? "体重無効" : "体脂肪率無効";
       alert(invalidFieldMessage);
       return;
     }
@@ -305,10 +302,7 @@ export default function MonthlyDetails() {
         },
       });
 
-      const fieldMessage =
-        field === "weight"
-          ? "無効な体重値です。0より大きい数値を入力してください。"
-          : "無効な体脂肪率値です。0より大きい数値を入力してください。";
+      const fieldMessage = field === "weight" ? "体重無効" : "体脂肪率無効";
       alert(fieldMessage);
     }
   }
@@ -331,11 +325,11 @@ export default function MonthlyDetails() {
   return (
     <div>
       <h2>
-        {yearNum}年{monthNum.toString().padStart(2, "0")}月の記録
+        {yearNum}/{monthNum.toString().padStart(2, "0")} 記録
       </h2>
 
       <p>
-        <Link to="/monthly">[月別に戻る]</Link>
+        <Link to="/monthly">[月別]</Link>
       </p>
 
       <p>
@@ -350,22 +344,22 @@ export default function MonthlyDetails() {
 
       {stats && (
         <div>
-          <h3>概要</h3>
+          <h3>統計</h3>
           <p>
-            <strong>記録数:</strong> {stats.totalRecords}
+            <strong>記録:</strong> {stats.totalRecords}件
             <br />
             <strong>平均体重:</strong>{" "}
-            {stats.totalRecords > 0 ? `${stats.averageWeight.toFixed(1)} kg` : "N/A"}
+            {stats.totalRecords > 0 ? `${stats.averageWeight.toFixed(1)}kg` : "N/A"}
             <br />
-            <strong>平均体脂肪率:</strong>{" "}
+            <strong>平均体脂肪:</strong>{" "}
             {stats.totalRecords > 0 ? `${stats.averageFat.toFixed(1)}%` : "N/A"}
             <br />
             <strong>体重変化:</strong>{" "}
             {stats.totalRecords > 1
-              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)} kg`
+              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)}kg`
               : "N/A"}
             <br />
-            <strong>体脂肪率変化:</strong>{" "}
+            <strong>体脂肪変化:</strong>{" "}
             {stats.totalRecords > 1
               ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}%`
               : "N/A"}
@@ -376,12 +370,12 @@ export default function MonthlyDetails() {
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(shareUrl).then(
-                    () => alert("共有URLがクリップボードにコピーされました！"),
-                    () => alert(`URLのコピーに失敗しました。手動でコピーしてください:\n${shareUrl}`)
+                    () => alert("コピー完了"),
+                    () => alert(`コピー失敗:\n${shareUrl}`)
                   );
                 }}
               >
-                共有URLをコピー
+                URLコピー
               </button>
             </p>
           )}
@@ -392,14 +386,14 @@ export default function MonthlyDetails() {
         <div>
           <WeightGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 推移`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")}`}
           />
 
           <br />
 
           <WeightAbsoluteGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 体重・体脂肪量`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 体重・脂肪量`}
           />
         </div>
       )}
@@ -409,9 +403,9 @@ export default function MonthlyDetails() {
           <thead>
             <tr>
               <th>日付</th>
-              <th>体重 (kg)</th>
-              <th>体脂肪率 %</th>
-              <th>除脂肪体重 (kg)</th>
+              <th>体重</th>
+              <th>体脂肪%</th>
+              <th>除脂肪</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -438,7 +432,7 @@ export default function MonthlyDetails() {
               return (
                 <tr key={dateKey}>
                   <td>
-                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek}){isToday && ` (今日)`}
+                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek}){isToday && ` 今日`}
                   </td>
                   <td>
                     <input
@@ -446,7 +440,7 @@ export default function MonthlyDetails() {
                       value={state.weight}
                       onChange={(e) => handleInputChange(dateKey, "weight", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "weight", e.target.value)}
-                      placeholder={state.isNew ? "体重" : ""}
+                      placeholder={state.isNew ? "kg" : ""}
                       size={8}
                     />
                   </td>
@@ -456,7 +450,7 @@ export default function MonthlyDetails() {
                       value={state.fat}
                       onChange={(e) => handleInputChange(dateKey, "fat", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "fat", e.target.value)}
-                      placeholder={state.isNew ? "体脂肪率 %" : ""}
+                      placeholder={state.isNew ? "%" : ""}
                       size={8}
                     />
                   </td>
@@ -468,7 +462,7 @@ export default function MonthlyDetails() {
                         onClick={() => handleSave(dateKey)}
                         disabled={saveLoading === dateKey}
                       >
-                        {saveLoading === dateKey ? "保存中..." : "保存"}
+                        {saveLoading === dateKey ? "保存中" : "保存"}
                       </button>
                     )}{" "}
                     {!state.isNew && (
@@ -477,7 +471,7 @@ export default function MonthlyDetails() {
                         onClick={() => handleDelete(dateKey)}
                         disabled={deleteLoading === dateKey}
                       >
-                        {deleteLoading === dateKey ? "削除中..." : "削除"}
+                        {deleteLoading === dateKey ? "削除中" : "削除"}
                       </button>
                     )}
                   </td>

@@ -17,7 +17,7 @@ export function WeightAbsoluteGraph({ records, title }: WeightAbsoluteGraphProps
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (records.length === 0) return <div>グラフ用のデータがありません</div>;
+  if (records.length === 0) return <div>データなし</div>;
 
   // Calculate fat weight and muscle weight for each record
   const recordsWithCalculations = records.map((record) => {
@@ -72,15 +72,15 @@ export function WeightAbsoluteGraph({ records, title }: WeightAbsoluteGraphProps
 
   return (
     <div>
-      <h3>{title || "体重・体脂肪量グラフ"}</h3>
+      <h3>{title || "体重・脂肪量"}</h3>
 
       <svg
         width={chartWidth}
         height={chartHeight}
         style={{ border: "1px solid black", display: "block", width: "100%" }}
-        aria-label="体重と体脂肪量のグラフ"
+        aria-label="グラフ"
       >
-        <title>総体重と体脂肪量の時系列推移</title>
+        <title>体重・脂肪量推移</title>
         {/* Horizontal grid lines */}
         {[0, 0.2, 0.4, 0.6, 0.8, 1].map((ratio) => (
           <line
@@ -140,8 +140,7 @@ export function WeightAbsoluteGraph({ records, title }: WeightAbsoluteGraphProps
               fontSize="12"
               fill="#666"
             >
-              {value.toFixed(1)}
-              kg
+              {value.toFixed(1)}kg
             </text>
           );
         })}
@@ -174,12 +173,12 @@ export function WeightAbsoluteGraph({ records, title }: WeightAbsoluteGraphProps
         })}
       </svg>
 
-      <p>凡例: 青 = 総体重 (kg)、赤 = 体脂肪量 (kg)、緑 = 除脂肪体重 (kg)</p>
+      <p>凡例: 青=総体重 赤=体脂肪量 緑=除脂肪</p>
 
       <p>
-        <strong>データポイント数:</strong> {records.length}
+        <strong>データ:</strong> {records.length}件
         <br />
-        <strong>期間:</strong> {new Date(records[0].date).toLocaleDateString()} -{" "}
+        <strong>期間:</strong> {new Date(records[0].date).toLocaleDateString()}～
         {new Date(records[records.length - 1].date).toLocaleDateString()}
       </p>
     </div>

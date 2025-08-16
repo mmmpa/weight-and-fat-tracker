@@ -17,7 +17,7 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (records.length === 0) return <div>グラフ用のデータがありません</div>;
+  if (records.length === 0) return <div>データなし</div>;
 
   const maxWeight = Math.max(...records.map((r) => r.weight));
   const minWeight = Math.min(...records.map((r) => r.weight));
@@ -70,15 +70,15 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
 
   return (
     <div>
-      <h3>{title || "体重・体脂肪率グラフ"}</h3>
+      <h3>{title || "グラフ"}</h3>
 
       <svg
         width={chartWidth}
         height={chartHeight}
         style={{ border: "1px solid black", display: "block", width: "100%" }}
-        aria-label="体重と体脂肪率のグラフ"
+        aria-label="グラフ"
       >
-        <title>体重と体脂肪率の時系列推移</title>
+        <title>推移</title>
         {/* Horizontal grid lines */}
         {[0, 0.2, 0.4, 0.6, 0.8, 1].map((ratio) => (
           <line
@@ -135,8 +135,7 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
               fontSize="12"
               fill="#3b82f6"
             >
-              {weight.toFixed(1)}
-              kg
+              {weight.toFixed(1)}kg
             </text>
           );
         })}
@@ -186,12 +185,12 @@ export function WeightGraph({ records, title }: WeightGraphProps) {
         })}
       </svg>
 
-      <p>凡例: 青線 = 体重 (kg)、赤線 = 体脂肪率 %</p>
+      <p>凡例: 青=体重 赤=体脂肪率</p>
 
       <p>
-        <strong>データポイント数:</strong> {records.length}
+        <strong>データ:</strong> {records.length}件
         <br />
-        <strong>期間:</strong> {new Date(records[0].date).toLocaleDateString()} -{" "}
+        <strong>期間:</strong> {new Date(records[0].date).toLocaleDateString()}～
         {new Date(records[records.length - 1].date).toLocaleDateString()}
       </p>
     </div>

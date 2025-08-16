@@ -37,7 +37,7 @@ export default function Monthly() {
 
   return (
     <div>
-      <h2>月別記録</h2>
+      <h2>月別</h2>
 
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}>
@@ -46,10 +46,10 @@ export default function Monthly() {
       </p>
 
       {availableMonths.length === 0 ? (
-        <p>記録が見つかりません。月別表示から最初の記録を追加してください。</p>
+        <p>記録なし。月別から追加。</p>
       ) : (
         <div>
-          <h3>利用可能な月</h3>
+          <h3>月一覧</h3>
           <ul>
             {availableMonths.map(
               ({ year, month, count }: { year: number; month: number; count: number }) => (
@@ -57,7 +57,7 @@ export default function Monthly() {
                   <Link to={`/monthly/${year}/${month}`}>
                     {year}/{month.toString().padStart(2, "0")}
                   </Link>{" "}
-                  ({count} 件)
+                  ({count}件)
                 </li>
               )
             )}
