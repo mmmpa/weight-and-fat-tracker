@@ -68,7 +68,7 @@ export default function ConfigPage() {
   };
 
   const handleResetDatabase = async () => {
-    if (!confirm("全データ削除します。よろしいですか？")) {
+    if (!confirm("全データ削除します。")) {
       return;
     }
 
@@ -93,7 +93,6 @@ export default function ConfigPage() {
   return (
     <div>
       <h1>DB設定</h1>
-
       <form onSubmit={handleSubmit}>
         <table border={1} style={{ borderCollapse: "collapse", marginBottom: "20px" }}>
           <tbody>
@@ -128,7 +127,6 @@ export default function ConfigPage() {
             </tr>
           </tbody>
         </table>
-
         <div style={{ marginBottom: "10px" }}>
           <button type="submit" disabled={isTestingConnection || isResettingDatabase}>
             {isTestingConnection ? "処理中..." : "保存"}
@@ -142,53 +140,29 @@ export default function ConfigPage() {
           </button>
         </div>
       </form>
-
       {message && <div style={{ color: "green", marginBottom: "10px" }}>{message}</div>}
-
       {error && <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>}
-
-      <div style={{ marginTop: "20px" }}>
-        <Link to="/">← 戻る</Link>
-      </div>
-
-      <hr style={{ margin: "30px 0" }} />
-
+      <table border={1} style={{ borderCollapse: "collapse" }}>
+        <tbody>
+          <tr>
+            <td style={{ padding: "5px" }}>DB URL:</td>
+            <td style={{ padding: "5px", fontFamily: "monospace" }}>{url || "(未設定)"}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: "5px" }}>トークン:</td>
+            <td style={{ padding: "5px", fontFamily: "monospace" }}>
+              {authToken ? "******" : "なし"}
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div>
-        <h3>現在</h3>
-        <table border={1} style={{ borderCollapse: "collapse" }}>
-          <tbody>
-            <tr>
-              <td style={{ padding: "5px" }}>DB URL:</td>
-              <td style={{ padding: "5px", fontFamily: "monospace" }}>{url || "(未設定)"}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: "5px" }}>トークン:</td>
-              <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {authToken ? "******" : "なし"}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr style={{ margin: "30px 0" }} />
-
-      <div>
-        <h3 style={{ color: "red" }}>⚠️ 危険</h3>
-        <p>全データ削除（元に戻せません）</p>
         <button
           type="button"
           onClick={handleResetDatabase}
           disabled={isResettingDatabase || isTestingConnection}
-          style={{
-            backgroundColor: "#dc2626",
-            color: "white",
-            padding: "10px 15px",
-            border: "1px solid #b91c1c",
-            cursor: isResettingDatabase ? "not-allowed" : "pointer",
-          }}
         >
-          {isResettingDatabase ? "処理中..." : "全削除"}
+          {isResettingDatabase ? "処理中..." : "DBリセット"}
         </button>
       </div>
     </div>

@@ -30,7 +30,7 @@ export function Navigation() {
           月別
         </NavLink>
         <NavLink to="/export-import" isActive={location.pathname === "/export-import"}>
-          エクスポート/インポート
+          書出/読込
         </NavLink>
         <NavLink to="/config" isActive={location.pathname === "/config"}>
           設定

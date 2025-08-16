@@ -58,7 +58,6 @@ export default function Share() {
       <p>
         <Link to="/">[ホームに戻る]</Link>
       </p>
-
       <h3>統計</h3>
       <p>
         <strong>期間:</strong> {dateRangeStr}
@@ -75,13 +74,8 @@ export default function Share() {
         <strong>体脂肪変化:</strong> {fatChange > 0 ? "+" : ""}
         {fatChange.toFixed(1)}%
       </p>
-
       <WeightGraph records={records} title="推移" />
-
-      <br />
-
       <WeightAbsoluteGraph records={records} title="体重・脂肪量" />
-
       <h3>データ</h3>
       <table border={1} style={{ borderCollapse: "collapse" }}>
         <thead>

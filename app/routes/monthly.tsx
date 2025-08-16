@@ -38,13 +38,11 @@ export default function Monthly() {
   return (
     <div>
       <h2>月別</h2>
-
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}>
           今月 ({currentYear}/{currentMonth.toString().padStart(2, "0")})
         </Link>
       </p>
-
       {availableMonths.length === 0 ? (
         <p>記録なし。月別から追加。</p>
       ) : (

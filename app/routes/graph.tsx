@@ -95,13 +95,11 @@ export default function Graph() {
   return (
     <div>
       <h2>グラフ</h2>
-
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth}`}>
           今月 ({currentYear}/{currentMonth})
         </Link>
       </p>
-
       <div style={{ marginBottom: "20px" }}>
         <h3>期間</h3>
         <label>
@@ -112,7 +110,6 @@ export default function Graph() {
           />
           期間指定
         </label>
-
         {useRangeFilter && (
           <div style={{ marginTop: "10px" }}>
             <label>
@@ -137,14 +134,10 @@ export default function Graph() {
           </div>
         )}
       </div>
-
       <WeightGraph
         records={records}
         title={useRangeFilter ? `${startDate}～${endDate}` : "全記録"}
       />
-
-      <br />
-
       <WeightAbsoluteGraph
         records={records}
         title={useRangeFilter ? `${startDate}～${endDate} 体重・脂肪量` : "体重・脂肪量"}

@@ -327,11 +327,9 @@ export default function MonthlyDetails() {
       <h2>
         {yearNum}/{monthNum.toString().padStart(2, "0")} 記録
       </h2>
-
       <p>
         <Link to="/monthly">[月別]</Link>
       </p>
-
       <p>
         <Link to={`/monthly/${prevYear}/${prevMonth}`}>
           ← {prevYear}/{prevMonth.toString().padStart(2, "0")}
@@ -341,7 +339,6 @@ export default function MonthlyDetails() {
           {nextYear}/{nextMonth.toString().padStart(2, "0")} →
         </Link>
       </p>
-
       {stats && (
         <div>
           <h3>統計</h3>
@@ -381,23 +378,18 @@ export default function MonthlyDetails() {
           )}
         </div>
       )}
-
       {records.length > 0 && (
         <div>
           <WeightGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
             title={`${yearNum}/${monthNum.toString().padStart(2, "0")}`}
           />
-
-          <br />
-
           <WeightAbsoluteGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
             title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 体重・脂肪量`}
           />
         </div>
       )}
-
       <div>
         <table>
           <thead>

@@ -41,33 +41,20 @@ export default function ExportImport() {
 
   return (
     <div>
-      <h1>データ出力/読込</h1>
-
-      <h2>出力</h2>
-      <p>全記録をJSONで出力</p>
+      <h1>書出/読込</h1>
+      <h2>書出</h2>
       <button type="button" onClick={handleExport}>
-        全記録出力
+        書出
       </button>
-
-      <br />
-      <br />
-
       <h2>読込</h2>
-      <p>JSONから記録読込。既存は更新、新規は追加。</p>
       <input type="file" accept=".json" onChange={handleImport} disabled={isProcessing} />
-
-      {importStatus && (
+  {importStatus && (
         <div>
           <br />
           <strong>状態:</strong> {importStatus}
         </div>
       )}
-
-      <br />
-      <br />
-
       <h3>形式</h3>
-      <p>JSON形式:</p>
       <pre style={{ border: "1px solid black", padding: "10px", backgroundColor: "#f5f5f5" }}>
         {`{
   "version": 1,
@@ -76,21 +63,10 @@ export default function ExportImport() {
       "date": "2024-01-15",
       "weight": 70.5,
       "fat_rate": 18.5
-    },
-    {
-      "date": "2024-01-16",
-      "weight": 70.3,
-      "fat_rate": 18.4
     }
   ]
 }`}
       </pre>
-      <p>
-        <em>注: 旧形式も対応</em>
-      </p>
-
-      <br />
-      <a href="/">ホームに戻る</a>
     </div>
   );
 }
