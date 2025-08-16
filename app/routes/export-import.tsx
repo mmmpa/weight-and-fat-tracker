@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   downloadExportFile,
   exportWeightRecords,
@@ -7,7 +6,6 @@ import {
 } from "../features/export-import/api";
 
 export default function ExportImport() {
-  const { t } = useTranslation();
   const [importStatus, setImportStatus] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -17,7 +15,7 @@ export default function ExportImport() {
       downloadExportFile(exportData);
     } catch (error) {
       alert(
-        `${t("errors.exportFailed")} ${error instanceof Error ? error.message : "Unknown error"}`
+        `エクスポートに失敗しました: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     }
   };
@@ -27,21 +25,17 @@ export default function ExportImport() {
     if (!file) return;
 
     setIsProcessing(true);
-    setImportStatus(t("common.status.processing"));
+    setImportStatus("処理中...");
 
     try {
       const text = await file.text();
       const result = await importWeightRecords(text);
       setImportStatus(
-        t("exportImport.import.complete", {
-          new: result.successful,
-          updated: 0, // The API doesn't distinguish between new and updated
-          failed: result.failed,
-        })
+        `インポート完了: ${result.successful}件の新規、${0}件の更新、${result.failed}件の失敗`
       );
     } catch (error) {
       setImportStatus(
-        `${t("errors.importFailed")} ${error instanceof Error ? error.message : "Unknown error"}`
+        `インポートに失敗しました: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     } finally {
       setIsProcessing(false);
@@ -53,33 +47,35 @@ export default function ExportImport() {
 
   return (
     <div>
-      <h1>{t("exportImport.title")}</h1>
+      <h1>体重記録のエクスポート/インポート</h1>
 
-      <h2>{t("exportImport.export.title")}</h2>
-      <p>{t("exportImport.export.description")}</p>
+      <h2>データのエクスポート</h2>
+      <p>全ての体重記録をJSONファイルでダウンロードします。</p>
       <button type="button" onClick={handleExport}>
-        {t("common.actions.export")}
+        全記録をエクスポート
       </button>
 
       <br />
       <br />
 
-      <h2>{t("exportImport.import.title")}</h2>
-      <p>{t("exportImport.import.description")}</p>
+      <h2>データのインポート</h2>
+      <p>
+        JSONファイルから体重記録をインポートします。既存の記録は更新され、新しい記録は追加されます。
+      </p>
       <input type="file" accept=".json" onChange={handleImport} disabled={isProcessing} />
 
       {importStatus && (
         <div>
           <br />
-          <strong>{t("common.status.status")}</strong> {importStatus}
+          <strong>ステータス:</strong> {importStatus}
         </div>
       )}
 
       <br />
       <br />
 
-      <h3>{t("exportImport.fileFormat.title")}</h3>
-      <p>{t("exportImport.fileFormat.description")}</p>
+      <h3>ファイル形式</h3>
+      <p>JSONファイルにはバージョンフィールドと記録の配列を含める必要があります:</p>
       <pre style={{ border: "1px solid black", padding: "10px", backgroundColor: "#f5f5f5" }}>
         {`{
   "version": 1,
@@ -98,11 +94,11 @@ export default function ExportImport() {
 }`}
       </pre>
       <p>
-        <em>{t("exportImport.fileFormat.note")}</em>
+        <em>注意: 旧形式（単純な配列）もインポート時にサポートされています。</em>
       </p>
 
       <br />
-      <a href="/">{t("common.actions.backToHome")}</a>
+      <a href="/">ホームに戻る</a>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -32,7 +31,6 @@ export async function clientLoader() {
 }
 
 export default function Graph() {
-  const { t } = useTranslation();
   const { initialRecords } = useLoaderData<typeof clientLoader>();
   const [records, setRecords] = useState<WeightRecord[]>(initialRecords);
   const [loading, setLoading] = useState(false);
@@ -86,13 +84,8 @@ export default function Graph() {
     await handleFilterChange();
   };
 
-  if (loading) return <div>{t("common.status.loading")}</div>;
-  if (error)
-    return (
-      <div>
-        {t("common.status.error")} {error}
-      </div>
-    );
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>エラー: {error}</div>;
 
   // Get current month for redirect link
   const currentDate = new Date();
@@ -101,29 +94,29 @@ export default function Graph() {
 
   return (
     <div>
-      <h2>{t("graph.title")}</h2>
+      <h2>体重・体脂肪率グラフ</h2>
 
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth}`}>
-          {t("monthly.currentMonth")} ({currentYear}/{currentMonth})
+          今月 ({currentYear}/{currentMonth})
         </Link>
       </p>
 
       <div style={{ marginBottom: "20px" }}>
-        <h3>{t("common.dateLabels.dateRange")}</h3>
+        <h3>期間</h3>
         <label>
           <input
             type="checkbox"
             checked={useRangeFilter}
             onChange={(e) => handleRangeFilterToggle(e.target.checked)}
           />
-          {t("graph.useDateRange")}
+          期間を指定
         </label>
 
         {useRangeFilter && (
           <div style={{ marginTop: "10px" }}>
             <label>
-              {t("common.dateLabels.startDate")}
+              開始日:
               <input
                 type="date"
                 value={startDate}
@@ -133,7 +126,7 @@ export default function Graph() {
             </label>
             <br />
             <label>
-              {t("common.dateLabels.endDate")}
+              終了日:
               <input
                 type="date"
                 value={endDate}
@@ -147,9 +140,7 @@ export default function Graph() {
 
       <WeightGraph
         records={records}
-        title={
-          useRangeFilter ? t("graph.recordsRange", { startDate, endDate }) : t("graph.allRecords")
-        }
+        title={useRangeFilter ? `${startDate}から${endDate}までの記録` : "全ての記録"}
       />
 
       <br />
@@ -158,8 +149,8 @@ export default function Graph() {
         records={records}
         title={
           useRangeFilter
-            ? t("graph.weightFatRange", { startDate, endDate })
-            : t("graph.weightFatAll")
+            ? `${startDate}から${endDate}までの体重・体脂肪量`
+            : "体重・体脂肪量 - 全記録"
         }
       />
     </div>

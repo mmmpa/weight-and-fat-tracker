@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { getAvailableMonths } from "../features/weights/api";
 import { DatabaseNotConfiguredError } from "../utils/errors";
@@ -31,7 +30,6 @@ export async function clientLoader() {
 
 export default function Monthly() {
   const { availableMonths } = useLoaderData<typeof clientLoader>();
-  const { t } = useTranslation();
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -39,19 +37,19 @@ export default function Monthly() {
 
   return (
     <div>
-      <h2>{t("monthly.title")}</h2>
+      <h2>月別記録</h2>
 
       <p>
         <Link to={`/monthly/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}>
-          {t("monthly.currentMonth")} ({currentYear}/{currentMonth.toString().padStart(2, "0")})
+          今月 ({currentYear}/{currentMonth.toString().padStart(2, "0")})
         </Link>
       </p>
 
       {availableMonths.length === 0 ? (
-        <p>{t("monthly.noRecords")}</p>
+        <p>記録が見つかりません。月別表示から最初の記録を追加してください。</p>
       ) : (
         <div>
-          <h3>{t("monthly.availableMonths")}</h3>
+          <h3>利用可能な月</h3>
           <ul>
             {availableMonths.map(
               ({ year, month, count }: { year: number; month: number; count: number }) => (
@@ -59,7 +57,7 @@ export default function Monthly() {
                   <Link to={`/monthly/${year}/${month}`}>
                     {year}/{month.toString().padStart(2, "0")}
                   </Link>{" "}
-                  ({count} {count !== 1 ? t("monthly.records") : t("monthly.record")})
+                  ({count} 件)
                 </li>
               )
             )}

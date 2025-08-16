@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -12,7 +11,6 @@ export function meta() {
 }
 
 export default function Share() {
-  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
 
   // Get the first query parameter key as the data string
@@ -22,17 +20,17 @@ export default function Share() {
   if (!records || records.length === 0) {
     return (
       <div>
-        <h2>Shared Weight Data</h2>
+        <h2>共有された体重データ</h2>
         <p>
-          <Link to="/">[{t("common.actions.backToHome")}]</Link>
+          <Link to="/">[ホームに戻る]</Link>
         </p>
-        <p>Invalid or missing share data in URL.</p>
-        <p>Expected format: ?yyyymmdd-n-aaabbbccc-xxxyyyzzz</p>
+        <p>URLに無効または不足している共有データがあります。</p>
+        <p>期待される形式: ?yyyymmdd-n-aaabbbccc-xxxyyyzzz</p>
         <ul>
-          <li>yyyymmdd: Start date (e.g., 20240101)</li>
-          <li>n: Digit count for weight (3 or 4)</li>
-          <li>aaabbbccc: Weight values</li>
-          <li>xxxyyyzzz: Fat percentage values (3 digits each)</li>
+          <li>yyyymmdd: 開始日 (例: 20240101)</li>
+          <li>n: 体重の桁数 (3または4)</li>
+          <li>aaabbbccc: 体重値</li>
+          <li>xxxyyyzzz: 体脂肪率値 (各3桁)</li>
         </ul>
       </div>
     );
@@ -56,43 +54,43 @@ export default function Share() {
 
   return (
     <div>
-      <h2>Shared Weight Data</h2>
+      <h2>共有された体重データ</h2>
       <p>
-        <Link to="/">[{t("common.actions.backToHome")}]</Link>
+        <Link to="/">[ホームに戻る]</Link>
       </p>
 
-      <h3>{t("share.summary")}</h3>
+      <h3>概要</h3>
       <p>
-        <strong>Date Range:</strong> {dateRangeStr}
+        <strong>期間:</strong> {dateRangeStr}
         <br />
-        <strong>Records:</strong> {records.length}
+        <strong>記録数:</strong> {records.length}
         <br />
-        <strong>Avg Weight:</strong> {avgWeight.toFixed(1)} kg
+        <strong>平均体重:</strong> {avgWeight.toFixed(1)} kg
         <br />
-        <strong>Avg Fat:</strong> {avgFat.toFixed(1)}%
+        <strong>平均体脂肪率:</strong> {avgFat.toFixed(1)}%
         <br />
-        <strong>Weight Change:</strong> {weightChange > 0 ? "+" : ""}
+        <strong>体重変化:</strong> {weightChange > 0 ? "+" : ""}
         {weightChange.toFixed(1)} kg
         <br />
-        <strong>Fat Change:</strong> {fatChange > 0 ? "+" : ""}
+        <strong>体脂肪率変化:</strong> {fatChange > 0 ? "+" : ""}
         {fatChange.toFixed(1)}%
       </p>
 
-      <WeightGraph records={records} title="Weight & Fat % Trends" />
+      <WeightGraph records={records} title="体重・体脂肪率の推移" />
 
       <br />
 
-      <WeightAbsoluteGraph records={records} title="Weight & Fat Weight" />
+      <WeightAbsoluteGraph records={records} title="体重・体脂肪量" />
 
-      <h3>Data Table</h3>
+      <h3>データテーブル</h3>
       <table border={1} style={{ borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Weight (kg)</th>
-            <th>Fat %</th>
-            <th>Fat Weight (kg)</th>
-            <th>Lean Mass (kg)</th>
+            <th>日付</th>
+            <th>体重 (kg)</th>
+            <th>体脂肪率 %</th>
+            <th>体脂肪量 (kg)</th>
+            <th>除脂肪体重 (kg)</th>
           </tr>
         </thead>
         <tbody>

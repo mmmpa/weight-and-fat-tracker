@@ -1,5 +1,4 @@
 import { type FormEvent, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { resetWeightDatabase } from "../features/weights/api";
 import {
@@ -11,7 +10,6 @@ import {
 import { testDatabaseConnection } from "../utils/turso";
 
 export default function ConfigPage() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
   const [authToken, setAuthToken] = useState("");
@@ -46,7 +44,7 @@ export default function ConfigPage() {
       await testDatabaseConnection(config.url, config.authToken);
 
       await saveDatabaseConfig(config);
-      setMessage(t("config.success"));
+      setMessage("データベース設定が保存され、テーブルが正常に初期化されました！");
 
       setTimeout(() => {
         navigate("/");
@@ -66,11 +64,13 @@ export default function ConfigPage() {
     await clearDatabaseConfig();
     setUrl("");
     setAuthToken("");
-    setMessage(t("config.cleared"));
+    setMessage("設定がクリアされました。");
   };
 
   const handleResetDatabase = async () => {
-    if (!confirm(t("config.dangerZone.resetConfirm"))) {
+    if (
+      !confirm("データベースをリセットしてもよろしいですか？全ての体重記録が完全に削除されます！")
+    ) {
       return;
     }
 
@@ -80,12 +80,12 @@ export default function ConfigPage() {
 
     try {
       await resetWeightDatabase();
-      setMessage(t("config.dangerZone.resetSuccess"));
+      setMessage("データベースが正常にリセットされました。全ての体重記録が削除されました。");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError(t("config.dangerZone.resetFailed"));
+        setError("データベースのリセットに失敗しました");
       }
     } finally {
       setIsResettingDatabase(false);
@@ -94,16 +94,18 @@ export default function ConfigPage() {
 
   return (
     <div>
-      <h1>{t("config.title")}</h1>
+      <h1>データベース設定</h1>
 
-      <p>{t("config.description")}</p>
+      <p>
+        Tursoデータベース接続を設定します。設定を保存すると、システムが自動的に接続をテストし、必要なテーブルを作成します。
+      </p>
 
       <form onSubmit={handleSubmit}>
         <table border={1} style={{ borderCollapse: "collapse", marginBottom: "20px" }}>
           <tbody>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="url">{t("config.dbUrl")}</label>
+                <label htmlFor="url">データベースURL:</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -118,7 +120,7 @@ export default function ConfigPage() {
             </tr>
             <tr>
               <td style={{ padding: "10px" }}>
-                <label htmlFor="authToken">{t("config.authToken")}</label>
+                <label htmlFor="authToken">認証トークン (オプション):</label>
               </td>
               <td style={{ padding: "10px" }}>
                 <input
@@ -135,14 +137,16 @@ export default function ConfigPage() {
 
         <div style={{ marginBottom: "10px" }}>
           <button type="submit" disabled={isTestingConnection || isResettingDatabase}>
-            {isTestingConnection ? t("config.testing") : t("config.saveButton")}
+            {isTestingConnection
+              ? "接続テスト中・テーブル作成中..."
+              : "設定を保存しテーブルを初期化"}
           </button>{" "}
           <button
             type="button"
             onClick={handleClear}
             disabled={isTestingConnection || isResettingDatabase}
           >
-            {t("common.actions.clear")}
+            設定をクリア
           </button>
         </div>
       </form>
@@ -152,25 +156,23 @@ export default function ConfigPage() {
       {error && <div style={{ color: "red", marginBottom: "10px" }}>Error: {error}</div>}
 
       <div style={{ marginTop: "20px" }}>
-        <Link to="/">← {t("common.actions.backToHome")}</Link>
+        <Link to="/">← ホームに戻る</Link>
       </div>
 
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3>{t("config.currentConfig")}</h3>
+        <h3>現在の設定</h3>
         <table border={1} style={{ borderCollapse: "collapse" }}>
           <tbody>
             <tr>
-              <td style={{ padding: "5px" }}>{t("config.dbUrl")}</td>
-              <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {url || t("config.notConfigured")}
-              </td>
+              <td style={{ padding: "5px" }}>データベースURL:</td>
+              <td style={{ padding: "5px", fontFamily: "monospace" }}>{url || "(未設定)"}</td>
             </tr>
             <tr>
-              <td style={{ padding: "5px" }}>{t("config.authToken")}</td>
+              <td style={{ padding: "5px" }}>認証トークン (オプション):</td>
               <td style={{ padding: "5px", fontFamily: "monospace" }}>
-                {authToken ? t("config.configured") : t("config.notSet")}
+                {authToken ? "****** (設定済み)" : "(未設定)"}
               </td>
             </tr>
           </tbody>
@@ -180,10 +182,10 @@ export default function ConfigPage() {
       <hr style={{ margin: "30px 0" }} />
 
       <div>
-        <h3 style={{ color: "red" }}>⚠️ {t("config.dangerZone.title")}</h3>
+        <h3 style={{ color: "red" }}>⚠️ 危険ゾーン</h3>
         <p>
-          <strong>{t("config.dangerZone.resetDatabase")}:</strong>{" "}
-          {t("config.dangerZone.resetDescription")}
+          <strong>データベースリセット:</strong>{" "}
+          データベースから全ての体重記録を完全に削除します。この操作は元に戻せません！
         </p>
         <button
           type="button"
@@ -197,9 +199,7 @@ export default function ConfigPage() {
             cursor: isResettingDatabase ? "not-allowed" : "pointer",
           }}
         >
-          {isResettingDatabase
-            ? t("config.dangerZone.resetting")
-            : t("config.dangerZone.resetButton")}
+          {isResettingDatabase ? "リセット中..." : "データベースをリセット"}
         </button>
       </div>
     </div>

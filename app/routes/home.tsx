@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 export function meta() {
   return [
     { title: "1kg" },
@@ -8,51 +6,49 @@ export function meta() {
 }
 
 export default function Home() {
-  const { t } = useTranslation();
-
   return (
     <div>
-      <h1>{t("home.title")}</h1>
+      <h1>1kg</h1>
 
-      <h2>{t("home.welcome.title")}</h2>
-      <p>{t("home.welcome.description")}</p>
+      <h2>ようこそ</h2>
+      <p>このシンプルなアプリケーションで体重と体脂肪率を時系列で記録・管理できます。</p>
 
-      <h3>{t("home.features.title")}</h3>
+      <h3>機能</h3>
       <p>
-        <strong>{t("home.features.dailyTracking.title")}</strong>
+        <strong>日次記録</strong>
         <br />
-        {t("home.features.dailyTracking.description")}
-        <br />
-        <br />
-        <strong>{t("home.features.monthlyView.title")}</strong>
-        <br />
-        {t("home.features.monthlyView.description")}
+        毎日の体重と体脂肪率の測定値を記録
         <br />
         <br />
-        <strong>{t("home.features.graphs.title")}</strong>
+        <strong>月別表示</strong>
         <br />
-        {t("home.features.graphs.description")}
+        カレンダー形式で月別記録を表示・編集
         <br />
         <br />
-        <strong>{t("home.features.exportImport.title")}</strong>
+        <strong>グラフ</strong>
         <br />
-        {t("home.features.exportImport.description")}
+        インタラクティブなグラフで進捗と傾向を視覚化
+        <br />
+        <br />
+        <strong>エクスポート/インポート</strong>
+        <br />
+        データをJSONでエクスポートまたはバックアップファイルからインポート
       </p>
 
-      <h3>{t("home.dataStorage.title")}</h3>
+      <h3>データ保存</h3>
       <p>
-        {t("home.dataStorage.local")}
+        全てのデータはTursoデータベースを使用して保存されます。
         <br />
-        {t("home.dataStorage.turso")}
+        設定セクションでデータベース接続を構成してください。
       </p>
 
-      <h3>{t("home.gettingStarted.title")}</h3>
+      <h3>はじめに</h3>
       <p>
-        {t("home.gettingStarted.step1")}
+        1. 設定セクションでデータベース接続を構成
         <br />
-        {t("home.gettingStarted.step2")}
+        2. 月別表示で日々の測定値の記録を開始
         <br />
-        {t("home.gettingStarted.step3")}
+        3. グラフ視覚化で進捗を追跡
       </p>
     </div>
   );

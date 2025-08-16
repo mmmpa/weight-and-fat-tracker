@@ -1,13 +1,10 @@
-import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { getCurrentMonthPath } from "../utils/navigation";
-import { LanguageSwitcher } from "./LanguageSwitcher";
 import { NavLink } from "./NavLink";
 
 export function Navigation() {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-  const { t } = useTranslation();
 
   // Get current month info for display
   const currentDate = new Date();
@@ -17,29 +14,26 @@ export function Navigation() {
 
   return (
     <div>
-      <h1>
-        {t("common.appTitle")}
-        <LanguageSwitcher />
-      </h1>
+      <h1>1kg</h1>
       <hr />
       <p className="navigation-links">
         <NavLink to="/" isActive={isHomePage}>
-          {t("common.navigation.home")}
+          ホーム
         </NavLink>
         <NavLink to="/graph" isActive={location.pathname === "/graph"}>
-          {t("common.navigation.graph")}
+          グラフ
         </NavLink>
         <NavLink to={currentMonthPath} isActive={location.pathname === currentMonthPath}>
-          {t("monthly.currentMonth")}
+          今月
         </NavLink>
         <NavLink to="/monthly" isActive={location.pathname === "/monthly"}>
-          {t("common.navigation.monthly")}
+          月別
         </NavLink>
         <NavLink to="/export-import" isActive={location.pathname === "/export-import"}>
-          {t("common.navigation.exportImport")}
+          エクスポート/インポート
         </NavLink>
         <NavLink to="/config" isActive={location.pathname === "/config"}>
-          {t("common.navigation.config")}
+          設定
         </NavLink>
         <span className="nav-item">
           <small>

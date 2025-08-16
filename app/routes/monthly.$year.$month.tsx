@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Link, redirect, useLoaderData } from "react-router";
 import { WeightAbsoluteGraph } from "../components/WeightAbsoluteGraph";
 import { WeightGraph } from "../components/WeightGraph";
@@ -102,7 +101,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 }
 
 export default function MonthlyDetails() {
-  const { t } = useTranslation();
   const {
     records: initialRecords,
     stats: initialStats,
@@ -121,7 +119,7 @@ export default function MonthlyDetails() {
     const state = recordStates[dateKey];
     if (!state || state.isNew) return;
 
-    if (!confirm(t("confirm.deleteRecord"))) return;
+    if (!confirm("この記録を削除してもよろしいですか？")) return;
 
     try {
       setDeleteLoading(dateKey);
@@ -145,7 +143,7 @@ export default function MonthlyDetails() {
         const newStats = await getMonthlyStats(yearNum, monthNum);
         setStats(newStats);
       } else {
-        alert(t("errors.deleteRecord"));
+        alert("記録の削除に失敗しました");
       }
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete record");
@@ -178,7 +176,11 @@ export default function MonthlyDetails() {
       });
 
       const invalidField = Number.isNaN(weight) || weight <= 0 ? "weight" : "fat";
-      alert(t(`validation.invalid${invalidField.charAt(0).toUpperCase() + invalidField.slice(1)}`));
+      const invalidFieldMessage =
+        invalidField === "weight"
+          ? "無効な体重値です。0より大きい数値を入力してください。"
+          : "無効な体脂肪率値です。0より大きい数値を入力してください。";
+      alert(invalidFieldMessage);
       return;
     }
 
@@ -303,7 +305,11 @@ export default function MonthlyDetails() {
         },
       });
 
-      alert(t(`monthly.alerts.invalid${field.charAt(0).toUpperCase() + field.slice(1)}`));
+      const fieldMessage =
+        field === "weight"
+          ? "無効な体重値です。0より大きい数値を入力してください。"
+          : "無効な体脂肪率値です。0より大きい数値を入力してください。";
+      alert(fieldMessage);
     }
   }
 
@@ -325,54 +331,44 @@ export default function MonthlyDetails() {
   return (
     <div>
       <h2>
-        {t("monthly.detailTitle", { year: yearNum, month: monthNum.toString().padStart(2, "0") })}
+        {yearNum}年{monthNum.toString().padStart(2, "0")}月の記録
       </h2>
 
       <p>
-        <Link to="/monthly">{t("common.actions.backToMonthly")}</Link>
+        <Link to="/monthly">[月別に戻る]</Link>
       </p>
 
       <p>
         <Link to={`/monthly/${prevYear}/${prevMonth}`}>
-          {t("monthly.navigation.previous", {
-            year: prevYear,
-            month: prevMonth.toString().padStart(2, "0"),
-          })}
+          ← {prevYear}/{prevMonth.toString().padStart(2, "0")}
         </Link>{" "}
         |
         <Link to={`/monthly/${nextYear}/${nextMonth}`}>
-          {t("monthly.navigation.next", {
-            year: nextYear,
-            month: nextMonth.toString().padStart(2, "0"),
-          })}
+          {nextYear}/{nextMonth.toString().padStart(2, "0")} →
         </Link>
       </p>
 
       {stats && (
         <div>
-          <h3>{t("monthly.summary.title")}</h3>
+          <h3>概要</h3>
           <p>
-            <strong>{t("monthly.summary.records")}</strong> {stats.totalRecords}
+            <strong>記録数:</strong> {stats.totalRecords}
             <br />
-            <strong>{t("monthly.summary.avgWeight")}</strong>{" "}
-            {stats.totalRecords > 0
-              ? `${stats.averageWeight.toFixed(1)} ${t("common.units.kg")}`
-              : t("common.units.na")}
+            <strong>平均体重:</strong>{" "}
+            {stats.totalRecords > 0 ? `${stats.averageWeight.toFixed(1)} kg` : "N/A"}
             <br />
-            <strong>{t("monthly.summary.avgFat")}</strong>{" "}
-            {stats.totalRecords > 0
-              ? `${stats.averageFat.toFixed(1)}${t("common.units.percent")}`
-              : t("common.units.na")}
+            <strong>平均体脂肪率:</strong>{" "}
+            {stats.totalRecords > 0 ? `${stats.averageFat.toFixed(1)}%` : "N/A"}
             <br />
-            <strong>{t("monthly.summary.weightChange")}</strong>{" "}
+            <strong>体重変化:</strong>{" "}
             {stats.totalRecords > 1
-              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)} ${t("common.units.kg")}`
-              : t("common.units.na")}
+              ? `${stats.weightChange > 0 ? "+" : ""}${stats.weightChange.toFixed(1)} kg`
+              : "N/A"}
             <br />
-            <strong>{t("monthly.summary.fatChange")}</strong>{" "}
+            <strong>体脂肪率変化:</strong>{" "}
             {stats.totalRecords > 1
-              ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}${t("common.units.percent")}`
-              : t("common.units.na")}
+              ? `${stats.fatChange > 0 ? "+" : ""}${stats.fatChange.toFixed(1)}%`
+              : "N/A"}
           </p>
           {shareUrl && (
             <p>
@@ -380,12 +376,12 @@ export default function MonthlyDetails() {
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(shareUrl).then(
-                    () => alert(t("success.urlCopied")),
-                    () => alert(`${t("errors.copyUrl")}\n${shareUrl}`)
+                    () => alert("共有URLがクリップボードにコピーされました！"),
+                    () => alert(`URLのコピーに失敗しました。手動でコピーしてください:\n${shareUrl}`)
                   );
                 }}
               >
-                {t("common.actions.copyUrl")}
+                共有URLをコピー
               </button>
             </p>
           )}
@@ -396,14 +392,14 @@ export default function MonthlyDetails() {
         <div>
           <WeightGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} ${t("monthly.graphs.trends")}`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 推移`}
           />
 
           <br />
 
           <WeightAbsoluteGraph
             records={records.filter((r) => r.weight > 0 && r.fat_rate > 0)}
-            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} ${t("monthly.graphs.weightFat")}`}
+            title={`${yearNum}/${monthNum.toString().padStart(2, "0")} 体重・体脂肪量`}
           />
         </div>
       )}
@@ -412,11 +408,11 @@ export default function MonthlyDetails() {
         <table>
           <thead>
             <tr>
-              <th>{t("common.table.date")}</th>
-              <th>{t("common.table.weight")}</th>
-              <th>{t("common.table.fatPercent")}</th>
-              <th>{t("monthly.table.leanMass")}</th>
-              <th>{t("common.table.actions")}</th>
+              <th>日付</th>
+              <th>体重 (kg)</th>
+              <th>体脂肪率 %</th>
+              <th>除脂肪体重 (kg)</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -442,8 +438,7 @@ export default function MonthlyDetails() {
               return (
                 <tr key={dateKey}>
                   <td>
-                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek})
-                    {isToday && ` ${t("common.dateLabels.today")}`}
+                    {recordDate.toLocaleDateString("ja-JP")} ({dayOfWeek}){isToday && ` (今日)`}
                   </td>
                   <td>
                     <input
@@ -451,7 +446,7 @@ export default function MonthlyDetails() {
                       value={state.weight}
                       onChange={(e) => handleInputChange(dateKey, "weight", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "weight", e.target.value)}
-                      placeholder={state.isNew ? t("monthly.placeholders.weight") : ""}
+                      placeholder={state.isNew ? "体重" : ""}
                       size={8}
                     />
                   </td>
@@ -461,7 +456,7 @@ export default function MonthlyDetails() {
                       value={state.fat}
                       onChange={(e) => handleInputChange(dateKey, "fat", e.target.value)}
                       onBlur={(e) => handleInputBlur(dateKey, "fat", e.target.value)}
-                      placeholder={state.isNew ? t("monthly.placeholders.fat") : ""}
+                      placeholder={state.isNew ? "体脂肪率 %" : ""}
                       size={8}
                     />
                   </td>
@@ -473,9 +468,7 @@ export default function MonthlyDetails() {
                         onClick={() => handleSave(dateKey)}
                         disabled={saveLoading === dateKey}
                       >
-                        {saveLoading === dateKey
-                          ? t("common.actions.saving")
-                          : t("common.actions.save")}
+                        {saveLoading === dateKey ? "保存中..." : "保存"}
                       </button>
                     )}{" "}
                     {!state.isNew && (
@@ -484,9 +477,7 @@ export default function MonthlyDetails() {
                         onClick={() => handleDelete(dateKey)}
                         disabled={deleteLoading === dateKey}
                       >
-                        {deleteLoading === dateKey
-                          ? t("common.actions.deleting")
-                          : t("common.actions.delete")}
+                        {deleteLoading === dateKey ? "削除中..." : "削除"}
                       </button>
                     )}
                   </td>
