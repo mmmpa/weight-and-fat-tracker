@@ -1,5 +1,5 @@
-import { type FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { type FormEvent, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import { resetWeightDatabase } from "../features/weights/api";
 import {
   clearDatabaseConfig,
@@ -9,24 +9,23 @@ import {
 } from "../utils/localStorage";
 import { testDatabaseConnection } from "../utils/turso";
 
+export async function clientLoader() {
+  const config = await getDatabaseConfig();
+  return {
+    url: config?.url || "",
+    authToken: config?.authToken || "",
+  };
+}
+
 export default function ConfigPage() {
+  const { url: initialUrl, authToken: initialAuthToken } = useLoaderData<typeof clientLoader>();
   const navigate = useNavigate();
-  const [url, setUrl] = useState("");
-  const [authToken, setAuthToken] = useState("");
+  const [url, setUrl] = useState(initialUrl);
+  const [authToken, setAuthToken] = useState(initialAuthToken);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [isResettingDatabase, setIsResettingDatabase] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const config = await getDatabaseConfig();
-      if (config) {
-        setUrl(config.url);
-        setAuthToken(config.authToken || "");
-      }
-    })();
-  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -149,7 +148,7 @@ export default function ConfigPage() {
           onClick={handleResetDatabase}
           disabled={isResettingDatabase || isTestingConnection}
         >
-          {isResettingDatabase ? "処理中..." : "DBリセット"}
+          {isResettingDatabase ? "処理中..." : "DBデータリセット"}
         </button>
       </div>
     </div>
