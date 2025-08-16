@@ -12,20 +12,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
-    
+
     - name: Install dependencies
       run: bun install
-    
+
     - name: Run type checking
       run: bun run typecheck
-    
+
     - name: Run linting and formatting check
       run: bun run check:fix
-    
+
     - name: Run tests
       run: bun test
-      continue-on-error: true  # Since tests are not yet configured
+
+    - name: Run build
+      run: bun run build
+
+    - name: Deploy
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        command: pages deploy build/client --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
